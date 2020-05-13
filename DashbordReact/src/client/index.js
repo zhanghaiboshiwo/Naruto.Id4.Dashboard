@@ -2,8 +2,8 @@ import React from 'react';
 import { Row, Col,Table,Input ,Button ,Modal,Space  } from 'antd';
 import 'antd/dist/antd.css';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import AddClient from './add.js';
 import axios from 'axios';
-const { confirm } = Modal;
 const { Search } = Input;
 const columns = [
     {
@@ -34,7 +34,21 @@ const columns = [
       render: (text, record) => (
         <Space>
           <a onClick={()=>{}}>编辑</a>
-          <Button type="link" danger onClick={showDeleteConfirm}>删除</Button>
+          <Button type="link" danger onClick={()=>{
+            Modal.confirm({
+              title: '是否删除此客户端?',
+              icon: <ExclamationCircleOutlined />,
+              okText: 'Yes',
+              okType: 'danger',
+              cancelText: 'No',
+              onOk() {
+                console.log(text);
+              },
+              onCancel() {
+                console.log(text);
+              },
+            });
+          }}>删除</Button>
           </Space>
       )}
   ];
@@ -52,28 +66,26 @@ class Client  extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { visible: false }
-        this.addClientClickEvent=this.addClientClickEvent.bind(this);
-        this.modalHandleOkEvent=this.modalHandleOkEvent.bind(this);
-        this.modalHandleCancelEvent=this.modalHandleCancelEvent.bind(this);
+        this.state = { 
+          current:1,//table的当前页码
+          total:0,
+          pageSize:10
+         }
     }
     
-    addClientClickEvent(e){
-        this.setState({
-            visible: true,
-          });
+    //表格页数更改的事件
+    changeTableEvent=(page, pageSize)=>{
+      this.setState({
+        current:page,
+        pageSize:pageSize
+      });
     }
-    //模态框确认的事件
-    modalHandleOkEvent=e=>{
-        this.setState({
-            visible: false,
-          });
-    }
-    //关闭模态框的事件
-    modalHandleCancelEvent=e=>{
-        this.setState({
-            visible: false,
-          });
+    //size更改的事件
+    sizeChangeEvent=(current, size)=>{
+      this.setState({
+        current:current,
+        pageSize:size
+      });
     }
     render() { 
         return (
@@ -92,19 +104,7 @@ class Client  extends React.Component {
                 </Col>
                 <Col span={1} style={{marginLeft:12}}>
                     <div>
-                    <Button  size="large" type="primary" onClick={this.addClientClickEvent}>新增客户端</Button>
-                    <Modal
-                        title="新增客户端"
-                        visible={this.state.visible}
-                        onOk={this.modalHandleOkEvent}
-                        onCancel={this.modalHandleCancelEvent}
-                        maskClosable="false"
-                        centered="true"
-                        >
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                    </Modal>
+                      <AddClient/>
                     </div>
                 </Col>
             </Row>
@@ -112,30 +112,23 @@ class Client  extends React.Component {
             <div style={{marginTop:12}}>
             <Row>
                 <Col span={24}>
-                <Table columns={columns} bordered  dataSource={data} scroll={{ x: 1500, y: 700  }} />
+                <Table columns={columns} bordered  dataSource={data}
+                 pagination={{
+                  total:this.state.total,
+                  showSizeChanger:true,
+                  showQuickJumper:true,
+                  showTotal:(total)=>`总条数${total}`,
+                  current:this.state.current,
+                  pageSize:this.state.pageSize,
+                  onChange:this.changeTableEvent,
+                  onShowSizeChange:this.sizeChangeEvent
+                }} />
                 </Col>
             </Row>
             </div>
             </>
         );
     }
-}
-
-function showDeleteConfirm() {
-  confirm({
-    title: 'Are you sure delete this task?',
-    icon: <ExclamationCircleOutlined />,
-    content: 'Some descriptions',
-    okText: 'Yes',
-    okType: 'danger',
-    cancelText: 'No',
-    onOk() {
-      console.log('OK');
-    },
-    onCancel() {
-      console.log('Cancel');
-    },
-  });
 }
 
 export default Client;
