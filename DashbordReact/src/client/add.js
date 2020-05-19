@@ -177,7 +177,7 @@ export default class AddClient extends React.Component {
                   name="IdentityTokenLifetime"
                   label="身份周期"
                   rules={[{ required: true, message: 'Please choose the approver' }]}>
-                <InputNumber min={1} defaultValue={3600}  placeholder="单位秒"/>
+                <InputNumber min={1} value={3600}  placeholder="单位秒"/>
                 </Form.Item>
               </Col>
             </Row>
@@ -187,7 +187,7 @@ export default class AddClient extends React.Component {
                   name="AccessTokenLifetime"
                   label="访问周期"
                   rules={[{ required: true, message: 'Please choose the dateTime' }]}>
-                 <InputNumber min={1} defaultValue={3600} placeholder="单位秒"/>
+                 <InputNumber min={1} value={3600} placeholder="单位秒"/>
                 </Form.Item>
               </Col>
             </Row>
@@ -199,21 +199,24 @@ export default class AddClient extends React.Component {
 }
 
 class ShowDrawer extends React.Component {
+ 
   constructor(props) {
     super(props);
     this.state = { 
       data:[
       {
+        key:1,
         title: 'Ant Design Title 1',
       },
       {
+        key:2,
         title: 'Ant Design Title 2',
       }
-    ] }
+    ]
+    }
   }
 
-  submit=()=>{
-    //const data = [[...this.state.data],{title: 'Ant Design Title 2'}];
+  pushList=()=>{
     const data = [...this.state.data];
     data.push({key:Math.random()})
     this.setState({
@@ -221,6 +224,11 @@ class ShowDrawer extends React.Component {
     });
   };
 
+  removeOnClick=(item)=>{
+    //移除当前行
+   var data=  [...this.state.data];
+    alert(item);
+  }
   render() { 
     return (  
       <Drawer
@@ -235,11 +243,11 @@ class ShowDrawer extends React.Component {
             textAlign: 'right',
           }}
         >
-          <Button onClick={this.onChildrenDrawerClose} style={{ marginRight: 8 }}>
-            Cancel
+          <Button onClick={this.pushList} style={{ marginRight: 8 }}>
+            追加
           </Button>
-          <Button onClick={this.submit} type="primary">
-            Submit
+          <Button  type="primary">
+            确认
           </Button>
         </div>
       }
@@ -248,10 +256,9 @@ class ShowDrawer extends React.Component {
     itemLayout="horizontal"
     dataSource={this.state.data}
     renderItem={item => (
-      <List.Item>
+      <List.Item actions={[<a key={item.key} onClick={e=>this.removeOnClick(this.state.index)}>删除</a>]}> 
         <List.Item.Meta
-          title={<a href="https://ant.design">{item.title}</a>}
-          description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+          description={<Input  defaultValue={item.title} />}
         />
       </List.Item>
     )}
