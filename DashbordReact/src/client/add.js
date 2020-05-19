@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Drawer, Form, Button, Col, Row, Input, Select ,InputNumber } from 'antd';
+import { Drawer, Form, Button, Col, Row, Input, Select ,InputNumber,List } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
@@ -201,9 +201,25 @@ export default class AddClient extends React.Component {
 class ShowDrawer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {  }
-
+    this.state = { 
+      data:[
+      {
+        title: 'Ant Design Title 1',
+      },
+      {
+        title: 'Ant Design Title 2',
+      }
+    ] }
   }
+
+  submit=()=>{
+    //const data = [[...this.state.data],{title: 'Ant Design Title 2'}];
+    const data = [...this.state.data];
+    data.push({key:Math.random()})
+    this.setState({
+      data: data
+    });
+  };
 
   render() { 
     return (  
@@ -222,13 +238,24 @@ class ShowDrawer extends React.Component {
           <Button onClick={this.onChildrenDrawerClose} style={{ marginRight: 8 }}>
             Cancel
           </Button>
-          <Button onClick={this.onChildrenDrawerClose} type="primary">
+          <Button onClick={this.submit} type="primary">
             Submit
           </Button>
         </div>
       }
       visible={this.props.childrenDrawer}>
-      {this.props.Content}
+     <List
+    itemLayout="horizontal"
+    dataSource={this.state.data}
+    renderItem={item => (
+      <List.Item>
+        <List.Item.Meta
+          title={<a href="https://ant.design">{item.title}</a>}
+          description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+        />
+      </List.Item>
+    )}
+  />
     </Drawer>
     );
   }
