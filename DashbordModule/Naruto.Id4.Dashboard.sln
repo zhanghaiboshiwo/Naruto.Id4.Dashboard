@@ -9,7 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AD2E772E-D24
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B315CC0B-CA31-4478-963C-C88636BA8C62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naruto.Id4.Dashboard.Module", "src\Naruto.Id4.Dashboard.Module\Naruto.Id4.Dashboard.Module.csproj", "{B427E508-09E4-4650-B32D-6A9E186E4EFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Naruto.Id4.Dashboard", "src\Naruto.Id4.Dashboard\Naruto.Id4.Dashboard.csproj", "{B427E508-09E4-4650-B32D-6A9E186E4EFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naruto.Id4.Dashboard.MongoProvider", "src\Naruto.Id4.Dashboard.MongoProvider\Naruto.Id4.Dashboard.MongoProvider.csproj", "{537CBEF3-9F53-400F-A790-FD15AF04B2CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{B427E508-09E4-4650-B32D-6A9E186E4EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B427E508-09E4-4650-B32D-6A9E186E4EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B427E508-09E4-4650-B32D-6A9E186E4EFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{537CBEF3-9F53-400F-A790-FD15AF04B2CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{537CBEF3-9F53-400F-A790-FD15AF04B2CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{537CBEF3-9F53-400F-A790-FD15AF04B2CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{537CBEF3-9F53-400F-A790-FD15AF04B2CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AE53846E-A229-4BB1-8CFF-B5645F3CF561} = {B315CC0B-CA31-4478-963C-C88636BA8C62}
 		{B427E508-09E4-4650-B32D-6A9E186E4EFB} = {AD2E772E-D24D-4A8B-BCBC-15853F78D9B3}
+		{537CBEF3-9F53-400F-A790-FD15AF04B2CE} = {AD2E772E-D24D-4A8B-BCBC-15853F78D9B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {42FFD77C-8BBD-47DE-9378-92A1B67AC5A3}

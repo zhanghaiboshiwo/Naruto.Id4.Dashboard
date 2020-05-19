@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Naruto.Id4.Dashboard.Module
+namespace Naruto.Id4.Dashboard.MongoProvider
 {
     public class Class1
     {
