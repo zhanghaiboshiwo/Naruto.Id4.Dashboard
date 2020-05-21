@@ -1,9 +1,10 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Drawer, Form, Button, Col, Row, Input, Select ,InputNumber,List } from 'antd';
+import { Drawer, Form, Button, Col, Row, Input, Select ,InputNumber } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-
+import  ClientList from './addlist';
 const { Option } = Select;
+
 
 export default class AddClient extends React.Component {
 
@@ -34,6 +35,10 @@ export default class AddClient extends React.Component {
     this.setState({
       childrenDrawer: false,
     });
+  }
+  //获取子组件的授权类型数据
+  getGrantTypeDate=(data)=>{
+    console.log(data);
   }
   render() {
     return (
@@ -80,7 +85,7 @@ export default class AddClient extends React.Component {
               <Button type="primary"  size="large" onClick={this.addGrantTypeEvent}>
               <PlusOutlined />新增 
               </Button>
-              <ShowDrawer childrenDrawer={this.state.childrenDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
+              <ClientList.ShowGrantTypeDrawer GetData={this.getGrantTypeDate} childrenDrawer={this.state.childrenDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
@@ -198,72 +203,3 @@ export default class AddClient extends React.Component {
   }
 }
 
-class ShowDrawer extends React.Component {
- 
-  constructor(props) {
-    super(props);
-    this.state = { 
-      data:[
-      {
-        key:1,
-        title: 'Ant Design Title 1',
-      },
-      {
-        key:2,
-        title: 'Ant Design Title 2',
-      }
-    ]
-    }
-  }
-
-  pushList=()=>{
-    const data = [...this.state.data];
-    data.push({key:Math.random()})
-    this.setState({
-      data: data
-    });
-  };
-
-  removeOnClick=(item)=>{
-    //移除当前行
-   var data=  [...this.state.data];
-    alert(item);
-  }
-  render() { 
-    return (  
-      <Drawer
-      title={this.props.title}
-      width={this.props.width}
-      closable={true}
-      maskClosable={false} 
-      onClose={this.props.onChildrenDrawerClose}
-      footer={
-        <div
-          style={{
-            textAlign: 'right',
-          }}
-        >
-          <Button onClick={this.pushList} style={{ marginRight: 8 }}>
-            追加
-          </Button>
-          <Button  type="primary">
-            确认
-          </Button>
-        </div>
-      }
-      visible={this.props.childrenDrawer}>
-     <List
-    itemLayout="horizontal"
-    dataSource={this.state.data}
-    renderItem={item => (
-      <List.Item actions={[<a key={item.key} onClick={e=>this.removeOnClick(this.state.index)}>删除</a>]}> 
-        <List.Item.Meta
-          description={<Input  defaultValue={item.title} />}
-        />
-      </List.Item>
-    )}
-  />
-    </Drawer>
-    );
-  }
-}
