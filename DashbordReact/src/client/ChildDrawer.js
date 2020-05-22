@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import { Drawer, Button, Input,List } from 'antd';
 
 // 授权类型弹出层
-class ShowGrantTypeDrawer extends React.Component {
+export default class ChildDrawer extends React.Component {
  
     constructor(props) {
       super(props);
@@ -11,7 +11,7 @@ class ShowGrantTypeDrawer extends React.Component {
         data:[]
       }
     }
-  
+  //添加数据
     pushList=()=>{
       const data = [...this.state.data];
       data.push({key:Math.random()})
@@ -49,6 +49,13 @@ class ShowGrantTypeDrawer extends React.Component {
         });
      }
     }
+
+    //确认事件
+    okEvent=(e)=>{
+      this.props.GetData(this.state.data);
+      //调用父组件的方法关闭当前层
+      this.props.onChildrenDrawerClose();
+    }
     render() { 
       return (  
         <Drawer
@@ -56,23 +63,22 @@ class ShowGrantTypeDrawer extends React.Component {
         width={this.props.width}
         closable={true}
         maskClosable={false} 
-        destroyOnClose="true"
+        destroyOnClose={true}
         onClose={this.props.onChildrenDrawerClose}
         footer={
           <div
             style={{
               textAlign: 'right',
-            }}
-          >
+            }}>
             <Button onClick={this.pushList} style={{ marginRight: 8 }}>
               追加
             </Button>
-            <Button  type="primary" onClick={e=>this.props.GetData(this.state.data)}>
+            <Button  type="primary" onClick={this.okEvent}>
               确认
             </Button>
           </div>
         }
-        visible={this.props.childrenDrawer}>
+      visible={this.props.childrenDrawer}> {/* 显示隐藏*/}
        <List
       itemLayout="horizontal"
       dataSource={this.state.data}
@@ -88,5 +94,3 @@ class ShowGrantTypeDrawer extends React.Component {
       );
     }
   }
-
-  export default {ShowGrantTypeDrawer};
