@@ -28,6 +28,6 @@ namespace Naruto.Id4.Dashboard.Storage
         /// 展示客户端集合
         /// </summary>
         /// <returns></returns>
-        Task<List<ClientViewModel>> GetClients(SearchClientModel search);
+        Task<Tuple<List<ClientViewModel>, long>> GetClients(SearchClientModel search);
     }
 }

@@ -9,6 +9,6 @@ namespace Naruto.Id4.Dashboard.Model
     /// </summary>
     public class ClientModel
     {
-
+        public string Id { get; set; }
     }
 }

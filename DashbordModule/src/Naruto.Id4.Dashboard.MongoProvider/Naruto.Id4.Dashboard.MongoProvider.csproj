@@ -4,4 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Naruto.Id4.Entities" Version="1.0.0" />
+    <PackageReference Include="Naruto.MongoDB" Version="1.0.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Naruto.Id4.Dashboard\Naruto.Id4.Dashboard.csproj" />
+  </ItemGroup>
+
 </Project>
