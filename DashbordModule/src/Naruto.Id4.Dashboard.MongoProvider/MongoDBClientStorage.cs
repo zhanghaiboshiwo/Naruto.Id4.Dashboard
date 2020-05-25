@@ -28,20 +28,21 @@ namespace Naruto.Id4.Dashboard.MongoProvider
             model.IsNotNull();
             if (model.Id.IsNullOrEmpty())
             {
-               // mongoRepository.Command<Client>().ReplaceOneAsync();
+                // mongoRepository.Command<Client>().ReplaceOneAsync();
             }
             else
             {
 
             }
+            return default;
         }
 
-        public Task<ClientModel> GetClient(long id)
+        public Task<ClientModel> GetClient(string id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Tuple<List<ClientViewModel>, long>> GetClients(SearchClientModel search)
+        public async Task<Tuple<List<ClientViewModel>, int>> GetClients(SearchClientModel search)
         {
             search.IsNotNull();
             //获取数据
@@ -49,16 +50,13 @@ namespace Naruto.Id4.Dashboard.MongoProvider
                   .WhereIf(!string.IsNullOrWhiteSpace(search.Keyword), a => a.ClientId.Contains(search.Keyword) || a.ClientName.Contains(search.Keyword))
                   .Select(a => new ClientViewModel
                   {
-                      Id = a.Id,
-                      ClientId = a.ClientId,
-                      ClientName = a.ClientName
+                      id = a.Id,
+                      clientId = a.ClientId,
+                      clientName = a.ClientName
                   }).PageBy(search.Page, search.PageSize).ToListAsync();
             //获取总条数
-            var count = await mongoRepository.Query<Client>().CountAsync(a =>
-                (!string.IsNullOrWhiteSpace(search.Keyword)) ?
-                (a.ClientId.Contains(search.Keyword) || a.ClientName.Contains(search.Keyword))
-                : true
-                );
+            var count = await mongoRepository.Query<Client>().AsQueryable()
+                  .WhereIf(!string.IsNullOrWhiteSpace(search.Keyword), a => a.ClientId.Contains(search.Keyword) || a.ClientName.Contains(search.Keyword)).CountAsync();
 
             return Tuple.Create(list, count);
         }

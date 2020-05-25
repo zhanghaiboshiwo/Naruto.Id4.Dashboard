@@ -24,7 +24,10 @@ namespace Naruto.Id4.DashboardApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNarutoId4DashbordApiMongoProvider(a =>
+            {
+                a.ConnectionString = "mongodb://192.168.31.167:27021"; a.DataBase = "test";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

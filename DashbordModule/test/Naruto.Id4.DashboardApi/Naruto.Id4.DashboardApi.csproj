@@ -4,5 +4,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Naruto.Id4.Dashboard.MongoProvider\Naruto.Id4.Dashboard.MongoProvider.csproj" />
+  </ItemGroup>
+
 
 </Project>

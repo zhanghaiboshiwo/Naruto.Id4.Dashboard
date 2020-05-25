@@ -8,14 +8,14 @@ const { Search } = Input;
 const columns = [
     {
       title: '客户端ID',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'clientId',
+      key: 'clientId',
       fixed: 'left',
     },
     {
       title: '客户端名称',
-      dataIndex: 'age',
-      key: 'age',
+      dataIndex: 'clientName',
+      key: 'clientName',
       fixed: 'left',
     },
     {
@@ -86,6 +86,13 @@ class Client  extends React.Component {
         current:current,
         pageSize:size
       });
+    }
+    //进行ajax请求
+    async componentDidMount() {
+      var s=process.env.PUBLIC_URL+ "/config.js";
+console.log(s);
+      //var config= require(process.env.PUBLIC_URL+ "/config.js")
+      // var res= await axios.get(config.apiUrl+'/user?ID=12345');
     }
     render() { 
         return (

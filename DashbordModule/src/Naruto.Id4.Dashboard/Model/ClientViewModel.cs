@@ -12,14 +12,14 @@ namespace Naruto.Id4.Dashboard.Model
         /// <summary>
         /// 主键id
         /// </summary>
-        public  string Id { get; set; }
+        public  string id { get; set; }
         /// <summary>
         /// 客户端id名称(唯一的)
         /// </summary>
-        public string ClientId { get; set; }
+        public string clientId { get; set; }
         /// <summary>
         /// 客户端名称
         /// </summary>
-        public string ClientName { get; set; }
+        public string clientName { get; set; }
     }
 }

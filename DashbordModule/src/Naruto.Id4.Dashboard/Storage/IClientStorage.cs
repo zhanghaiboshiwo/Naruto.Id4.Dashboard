@@ -23,11 +23,11 @@ namespace Naruto.Id4.Dashboard.Storage
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<ClientModel> GetClient(long id);
+        Task<ClientModel> GetClient(string id);
         /// <summary>
         /// 展示客户端集合
         /// </summary>
         /// <returns></returns>
-        Task<Tuple<List<ClientViewModel>, long>> GetClients(SearchClientModel search);
+        Task<Tuple<List<ClientViewModel>, int>> GetClients(SearchClientModel search);
     }
 }

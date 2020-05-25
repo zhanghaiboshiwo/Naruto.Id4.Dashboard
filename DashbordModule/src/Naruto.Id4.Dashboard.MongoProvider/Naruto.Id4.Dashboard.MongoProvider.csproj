@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Naruto.Id4.Entities" Version="1.0.0" />
     <PackageReference Include="Naruto.MongoDB" Version="1.0.0.1" />
   </ItemGroup>
