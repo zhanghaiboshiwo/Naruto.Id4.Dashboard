@@ -24,9 +24,19 @@ namespace Naruto.Id4.DashboardApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(a =>
+            {
+                a.AddPolicy("any",b=> {
+
+                    b.AllowCredentials();
+                    b.AllowAnyHeader();
+                    b.AllowAnyMethod();
+                    b.WithOrigins("http://localhost:3000");
+                });
+            });
             services.AddControllers().AddNarutoId4DashbordApiMongoProvider(a =>
             {
-                a.ConnectionString = "mongodb://192.168.31.167:27021"; a.DataBase = "test";
+                a.ConnectionString = "mongodb://192.168.1.6:27017"; a.DataBase = "identityserver";
             });
         }
 
@@ -37,9 +47,9 @@ namespace Naruto.Id4.DashboardApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors("any");
             app.UseRouting();
-
+           
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

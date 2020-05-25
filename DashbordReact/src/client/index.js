@@ -53,23 +53,25 @@ const columns = [
       )}
   ];
   
-  const data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: i,
-      name: `Edrward ${i}`,
-      age: 32,
-      address: `London Park no. ${i}`,
-    });
-  }
+  // const data = [];
+  // for (let i = 0; i < 100; i++) {
+  //   data.push({
+  //     key: i,
+  //     name: `Edrward ${i}`,
+  //     age: 32,
+  //     address: `London Park no. ${i}`,
+  //   });
+  // }
 class Client  extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = { 
           current:1,//table的当前页码
-          total:0,
-          pageSize:10
+          total:0,//总条数
+          pageSize:10,
+          keyword:"",
+          data:[]
          }
     }
     
@@ -89,10 +91,23 @@ class Client  extends React.Component {
     }
     //进行ajax请求
     async componentDidMount() {
-      var s=process.env.PUBLIC_URL+ "/config.js";
-console.log(s);
-      //var config= require(process.env.PUBLIC_URL+ "/config.js")
-      // var res= await axios.get(config.apiUrl+'/user?ID=12345');
+      await this.getDataAsync(this.state.keyword);
+    }
+    //获取数据
+    getDataAsync=async(keyword)=>{
+      var res= await axios.get(`http://localhost:5000/naruto/client?keyword=${keyword}&page=${this.state.current}&pagesize=${this.state.pageSize}`);
+     if(res.status==200){
+       //批量往数组追加key
+       var data=[...res.data.data];
+       data.map((value,index)=>{
+         value.key=index;
+       });
+       //设置数据
+       this.setState({
+         data:data,
+         total:res.data.recordCount
+       });
+     }
     }
     render() { 
         return (
@@ -105,7 +120,12 @@ console.log(s);
                     placeholder="客户端Id/名称"
                     enterButton="搜索"
                     size="large"
-                    onSearch={value => alert(value)}
+                    onSearch={async value =>{
+                      this.setState({
+                        keyword:value
+                      });
+                      await this.getDataAsync(value);
+                    }}
                     />
                     </div>
                 </Col>
@@ -119,7 +139,7 @@ console.log(s);
             <div style={{marginTop:12}}>
             <Row>
                 <Col span={24}>
-                <Table columns={columns} bordered  dataSource={data}
+                <Table columns={columns} bordered  dataSource={this.state.data}
                  pagination={{
                   total:this.state.total,
                   showSizeChanger:true,
