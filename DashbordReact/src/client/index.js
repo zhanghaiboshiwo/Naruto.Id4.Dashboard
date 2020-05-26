@@ -111,7 +111,8 @@ class Client  extends React.Component {
           total:0,//总条数
           pageSize:10,
           keyword:"",
-          data:[]
+          data:[],
+          loading:false
          }
     }
     
@@ -141,6 +142,8 @@ class Client  extends React.Component {
     }
     //获取数据
     getDataAsync=async(keyword,page,pageSize)=>{
+      //开启加载框
+      this.setState({ loading: true });
       var res= await axios.get(`/naruto/client?keyword=${keyword}&page=${page}&pagesize=${pageSize}`);
       if(res.status==200){
        //批量往数组追加key
@@ -154,6 +157,8 @@ class Client  extends React.Component {
          total:res.data.recordCount
        });
      }
+     //关闭加载框
+     this.setState({ loading: false });
     }
     render() { 
         return (
@@ -170,7 +175,7 @@ class Client  extends React.Component {
                       this.setState({
                         keyword:value
                       });
-                      await this.getDataAsync(value);
+                      await this.getDataAsync(value,this.state.current,this.state.pageSize);
                     }}
                     />
                     </div>
@@ -186,6 +191,7 @@ class Client  extends React.Component {
             <Row>
                 <Col span={24}>
                 <Table columns={columns} bordered  dataSource={this.state.data}
+                 loading={this.state.loading}
                  pagination={{
                   total:this.state.total,
                   showSizeChanger:true,
