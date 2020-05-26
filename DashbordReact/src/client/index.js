@@ -5,6 +5,7 @@ import { ExclamationCircleOutlined ,CloseOutlined, CheckOutlined  } from '@ant-d
 import AddClient from './add.js';
 import axios from 'axios';
 import config from '../config'
+import qs from 'qs'
 const { Search } = Input;
 //配置全局参数
 axios.defaults.baseURL=config.apiUrl;
@@ -24,24 +25,17 @@ const columns = [
     },
     {
       title: '是否需要秘钥',
+      dataIndex:'requireClientSecret',
       key: 'requireClientSecret',
       render: (requireClientSecret, record) => (
         <>
           <Switch checkedChildren="开启" unCheckedChildren="关闭" defaultChecked={requireClientSecret} onChange={async (checked,event)=>{
             console.log(checked);
               //请求接口 更改状态
-             var res= await axios.post(`/naruto/client/requireclientsecret/${record.id}`,
-             {
-                requireClientSecret:checked
-             },
-             {
-              headers:{
-                "Content-Type":"application/x-www-form-urlencoded"
-              }
-             })
-             .catch(function (error) {
-               console.log(error);
-            });
+             var res= await axios.post(`/naruto/client/requireclientsecret/${record.id}`,qs.stringify({requireClientSecret:checked}) )
+                                .catch(function (error) {
+                                  console.log(error);
+                                });
             if(res.data!=null && res.data.status==0){
                return (message.success('操作成功'));
             }
@@ -60,14 +54,10 @@ const columns = [
         <>
           <Switch checkedChildren="开启" unCheckedChildren="关闭" defaultChecked={requireConsent} onChange={async (checked,event)=>{
                //请求接口 更改状态
-             var res= await axios.post(`/naruto/client/requireconsent/${record.id}`,{
-              data:{
-                requireConsent:checked
-              }
-             })
-             .catch(function (error) {
-               console.log(error);
-            });
+             var res= await axios.post(`/naruto/client/requireconsent/${record.id}`, qs.stringify({ requireConsent:checked}))
+                                    .catch(function (error) {
+                                      console.log(error);
+                                      });
             if(res.data!=null && res.data.status==0){
                return (message.success('操作成功'));
             }
@@ -91,9 +81,19 @@ const columns = [
               okText: 'Yes',
               okType: 'danger',
               cancelText: 'No',
-              onOk() {
-                console.log(text);
-              },
+              async onOk() {
+                //请求接口
+                var res= await axios.delete(`/naruto/client/${record.id}`)
+                                    .catch(function (error) {
+                                      console.log(error);
+                                      });
+                  if(res.data!=null && res.data.status==0){
+                    return (message.success('操作成功'));
+                  }
+                  else{
+                    return (message.warning("操作失败"));
+                  }
+                },
               onCancel() {
                 console.log(text);
               },
@@ -116,26 +116,32 @@ class Client  extends React.Component {
     }
     
     //表格页数更改的事件
-    changeTableEvent=(page, pageSize)=>{
+    changeTableEvent=async(page, pageSize)=>{
+      //更新状态机
       this.setState({
         current:page,
         pageSize:pageSize
       });
+      //更新数据
+      await this.getDataAsync(this.state.keyword,page,pageSize);
     }
     //size更改的事件
-    sizeChangeEvent=(current, size)=>{
+   sizeChangeEvent=async(current, size)=>{
+      //更新状态机
       this.setState({
         current:current,
         pageSize:size
       });
+      //更新数据
+      await this.getDataAsync(this.state.keyword,current,size);
     }
     //进行ajax请求
     async componentDidMount() {
-      await this.getDataAsync(this.state.keyword);
+      await this.getDataAsync(this.state.keyword,this.state.current,this.state.pageSize);
     }
     //获取数据
-    getDataAsync=async(keyword)=>{
-      var res= await axios.get(`/naruto/client?keyword=${keyword}&page=${this.state.current}&pagesize=${this.state.pageSize}`);
+    getDataAsync=async(keyword,page,pageSize)=>{
+      var res= await axios.get(`/naruto/client?keyword=${keyword}&page=${page}&pagesize=${pageSize}`);
       if(res.status==200){
        //批量往数组追加key
        var data=[...res.data.data];

@@ -94,5 +94,15 @@ namespace Naruto.Id4.Dashboard.MongoProvider
                { "RequireConsent",requireConsent}
             });
         }
+
+        /// <summary>
+        /// 根据id删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteClientById(string id)
+        {
+            return await mongoRepository.Command<Client>().DeleteAsync(a => a.Id == id);
+        }
     }
 }

@@ -45,5 +45,11 @@ namespace Naruto.Id4.Dashboard.Storage
         /// <param name="requireClientSecret"></param>
         /// <returns></returns>
         Task<bool> UpdateRequireConsent(string id, bool requireConsent);
+        /// <summary>
+        /// 根据id删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> DeleteClientById(string id);
     }
 }

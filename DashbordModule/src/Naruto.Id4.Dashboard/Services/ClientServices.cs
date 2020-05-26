@@ -76,5 +76,26 @@ namespace Naruto.Id4.Dashboard.Services
             }
             return new NarutoFailResult("操作失败");
         }
+
+
+        /// <summary>
+        /// 根据id删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<NarutoResult> DeleteClientById(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return new NarutoFailResult($"{nameof(id)}值不能为空");
+            }
+            //访问存储接口
+            var res = await clientStorage.DeleteClientById(id);
+            if (res)
+            {
+                return new NarutoSuccessResult("操作成功");
+            }
+            return new NarutoFailResult("操作失败");
+        }
     }
 }

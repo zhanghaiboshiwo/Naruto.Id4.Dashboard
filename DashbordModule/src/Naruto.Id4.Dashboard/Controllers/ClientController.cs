@@ -38,7 +38,7 @@ namespace Naruto.Id4.Dashboard.Core
         /// <param name="id"></param>
         /// <param name="requireClientSecret"></param>
         /// <returns></returns>
-        public async Task<NarutoResult> UpdateRequireClientSecret(string id,bool requireClientSecret) => await services.UpdateRequireClientSecret(id, requireClientSecret);
+        public async Task<NarutoResult> UpdateRequireClientSecret(string id, [FromForm] bool requireClientSecret) => await services.UpdateRequireClientSecret(id, requireClientSecret);
 
         [HttpPost("RequireConsent/{id}")]
         /// <summary>
@@ -48,5 +48,13 @@ namespace Naruto.Id4.Dashboard.Core
         /// <param name="requireClientSecret"></param>
         /// <returns></returns>
         public async Task<NarutoResult> UpdateRequireConsent(string id, [FromForm] bool requireConsent) => await services.UpdateRequireConsent(id, requireConsent);
+
+        /// <summary>
+        /// 删除客户端
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public async Task<NarutoResult> DeleteClientById(string id) => await services.DeleteClientById(id);
     }
 }
