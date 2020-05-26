@@ -29,5 +29,21 @@ namespace Naruto.Id4.Dashboard.Storage
         /// </summary>
         /// <returns></returns>
         Task<Tuple<List<ClientViewModel>, int>> GetClients(SearchClientModel search);
+
+        /// <summary>
+        /// 更改是否需要秘钥的状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="requireClientSecret"></param>
+        /// <returns></returns>
+        Task<bool> UpdateRequireClientSecret(string id, bool requireClientSecret);
+
+        /// <summary>
+        /// 更改授权页面的状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="requireClientSecret"></param>
+        /// <returns></returns>
+        Task<bool> UpdateRequireConsent(string id, bool requireConsent);
     }
 }

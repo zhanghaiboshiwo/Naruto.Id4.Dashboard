@@ -19,18 +19,62 @@ namespace Naruto.Id4.Dashboard.Services
         {
             clientStorage = _clientStorage;
         }
-        public async Task<IActionResult> GetClients(SearchClientModel search)
+        /// <summary>
+        /// 获取数据
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        public async Task<NarutoResult> GetClients(SearchClientModel search)
         {
-            NarutoResult narutoResult = new NarutoResult();
             if (search == null)
             {
-                narutoResult.msg = $"{nameof(search)}值不能为空";
-                return new NotFoundObjectResult(narutoResult);
+                return new NarutoFailResult($"{nameof(search)}值不能为空");
             }
             var res = await clientStorage.GetClients(search);
-            narutoResult.data = res.Item1;
-            narutoResult.recordCount = res.Item2;
-            return new OkObjectResult(narutoResult);
+            return new NarutoSuccessResult("操作成功", res.Item1, res.Item2);
+        }
+
+
+        /// <summary>
+        /// 更改是否需要秘钥的状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="requireClientSecret"></param>
+        /// <returns></returns>
+        public async Task<NarutoResult> UpdateRequireClientSecret(string id, bool requireClientSecret)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return new NarutoFailResult($"{nameof(id)}值不能为空");
+            }
+            //访问存储接口
+            var res = await clientStorage.UpdateRequireClientSecret(id, requireClientSecret);
+            if (res)
+            {
+                return new NarutoSuccessResult("操作成功");
+            }
+            return new NarutoFailResult("操作失败");
+        }
+
+        /// <summary>
+        /// 更改授权页面的状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="requireClientSecret"></param>
+        /// <returns></returns>
+        public async Task<NarutoResult> UpdateRequireConsent(string id, bool requireConsent)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return new NarutoFailResult($"{nameof(id)}值不能为空");
+            }
+            //访问存储接口
+            var res = await clientStorage.UpdateRequireConsent(id, requireConsent);
+            if (res)
+            {
+                return new NarutoSuccessResult("操作成功");
+            }
+            return new NarutoFailResult("操作失败");
         }
     }
 }

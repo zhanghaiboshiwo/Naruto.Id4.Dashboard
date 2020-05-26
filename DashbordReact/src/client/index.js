@@ -1,10 +1,14 @@
 import React from 'react';
-import { Row, Col,Table,Input ,Button ,Modal,Space  } from 'antd';
+import { Row, Col,Table,Input ,Button ,Modal,Space ,Switch,message  } from 'antd';
 import 'antd/dist/antd.css';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined ,CloseOutlined, CheckOutlined  } from '@ant-design/icons';
 import AddClient from './add.js';
 import axios from 'axios';
+import config from '../config'
 const { Search } = Input;
+//配置全局参数
+axios.defaults.baseURL=config.apiUrl;
+//定义表格的列
 const columns = [
     {
       title: '客户端ID',
@@ -19,14 +23,60 @@ const columns = [
       fixed: 'left',
     },
     {
-      title: '秘钥',
-      dataIndex: 'address',
-      key: '1',
+      title: '是否需要秘钥',
+      key: 'requireClientSecret',
+      render: (requireClientSecret, record) => (
+        <>
+          <Switch checkedChildren="开启" unCheckedChildren="关闭" defaultChecked={requireClientSecret} onChange={async (checked,event)=>{
+            console.log(checked);
+              //请求接口 更改状态
+             var res= await axios.post(`/naruto/client/requireclientsecret/${record.id}`,
+             {
+                requireClientSecret:checked
+             },
+             {
+              headers:{
+                "Content-Type":"application/x-www-form-urlencoded"
+              }
+             })
+             .catch(function (error) {
+               console.log(error);
+            });
+            if(res.data!=null && res.data.status==0){
+               return (message.success('操作成功'));
+            }
+            else{
+              return (message.warning("操作失败"));
+            }
+          }}/>
+        </>
+      )
     },
     {
-      title: '授权页面',
-      dataIndex: 'address',
-      key: '2',
+      title: '是否需要授权页面',
+      dataIndex: 'requireConsent',
+      key: 'requireConsent',
+      render: (requireConsent, record) => (
+        <>
+          <Switch checkedChildren="开启" unCheckedChildren="关闭" defaultChecked={requireConsent} onChange={async (checked,event)=>{
+               //请求接口 更改状态
+             var res= await axios.post(`/naruto/client/requireconsent/${record.id}`,{
+              data:{
+                requireConsent:checked
+              }
+             })
+             .catch(function (error) {
+               console.log(error);
+            });
+            if(res.data!=null && res.data.status==0){
+               return (message.success('操作成功'));
+            }
+            else{
+              return (message.warning("操作失败"));
+            }
+          }}/>
+        </>
+      )
     },
     {
       title: '',
@@ -52,16 +102,6 @@ const columns = [
           </Space>
       )}
   ];
-  
-  // const data = [];
-  // for (let i = 0; i < 100; i++) {
-  //   data.push({
-  //     key: i,
-  //     name: `Edrward ${i}`,
-  //     age: 32,
-  //     address: `London Park no. ${i}`,
-  //   });
-  // }
 class Client  extends React.Component {
 
     constructor(props) {
@@ -95,8 +135,8 @@ class Client  extends React.Component {
     }
     //获取数据
     getDataAsync=async(keyword)=>{
-      var res= await axios.get(`http://localhost:5000/naruto/client?keyword=${keyword}&page=${this.state.current}&pagesize=${this.state.pageSize}`);
-     if(res.status==200){
+      var res= await axios.get(`/naruto/client?keyword=${keyword}&page=${this.state.current}&pagesize=${this.state.pageSize}`);
+      if(res.status==200){
        //批量往数组追加key
        var data=[...res.data.data];
        data.map((value,index)=>{

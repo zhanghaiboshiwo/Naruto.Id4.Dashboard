@@ -29,6 +29,24 @@ namespace Naruto.Id4.Dashboard.Core
         /// </summary>
         /// <param name="search"></param>
         /// <returns></returns>
-        public async Task<IActionResult> GetClients([FromQuery]SearchClientModel search)=>await services.GetClients(search);
+        public async Task<NarutoResult> GetClients([FromQuery] SearchClientModel search) => await services.GetClients(search);
+
+        [HttpPost("RequireClientSecret/{id}")]
+        /// <summary>
+        /// 更改是否需要秘钥的状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="requireClientSecret"></param>
+        /// <returns></returns>
+        public async Task<NarutoResult> UpdateRequireClientSecret(string id,bool requireClientSecret) => await services.UpdateRequireClientSecret(id, requireClientSecret);
+
+        [HttpPost("RequireConsent/{id}")]
+        /// <summary>
+        /// 更改是否需要授权页面的状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="requireClientSecret"></param>
+        /// <returns></returns>
+        public async Task<NarutoResult> UpdateRequireConsent(string id, [FromForm] bool requireConsent) => await services.UpdateRequireConsent(id, requireConsent);
     }
 }

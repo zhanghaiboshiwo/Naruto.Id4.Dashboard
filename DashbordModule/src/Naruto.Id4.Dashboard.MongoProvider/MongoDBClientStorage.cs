@@ -52,13 +52,47 @@ namespace Naruto.Id4.Dashboard.MongoProvider
                   {
                       id = a.Id,
                       clientId = a.ClientId,
-                      clientName = a.ClientName
+                      clientName = a.ClientName,
+                      requireClientSecret = a.RequireClientSecret,
+                      requireConsent = a.RequireConsent
                   }).PageBy(search.Page, search.PageSize).ToListAsync();
             //获取总条数
             var count = await mongoRepository.Query<Client>().AsQueryable()
                   .WhereIf(!string.IsNullOrWhiteSpace(search.Keyword), a => a.ClientId.Contains(search.Keyword) || a.ClientName.Contains(search.Keyword)).CountAsync();
 
             return Tuple.Create(list, count);
+        }
+
+        /// <summary>
+        /// 更改是否需要秘钥的状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="requireClientSecret"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdateRequireClientSecret(string id, bool requireClientSecret)
+        {
+            id.IsNotNull();
+            //修改
+            return await mongoRepository.Command<Client>().UpdateAsync(a => a.Id == id, new Dictionary<string, object>()
+            {
+               { "RequireClientSecret",requireClientSecret}
+            });
+        }
+
+        /// <summary>
+        /// 更改授权页面的状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="requireClientSecret"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdateRequireConsent(string id, bool requireConsent)
+        {
+            id.IsNotNull();
+            //修改
+            return await mongoRepository.Command<Client>().UpdateAsync(a => a.Id == id, new Dictionary<string, object>()
+            {
+               { "RequireConsent",requireConsent}
+            });
         }
     }
 }

@@ -21,5 +21,15 @@ namespace Naruto.Id4.Dashboard.Model
         /// 客户端名称
         /// </summary>
         public string clientName { get; set; }
+
+        /// <summary>
+        /// 指定此客户端是否需要密钥才能从令牌端点请求令牌.默认true
+        /// </summary>
+
+        public bool requireClientSecret { get; set; } = true;
+        /// <summary>
+        /// 指定是否需要同意屏幕.默认true 用于oidc
+        /// </summary>
+        public bool requireConsent { get; set; } = true;
     }
 }
