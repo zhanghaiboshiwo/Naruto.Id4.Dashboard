@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 import { Drawer, Form, Button, Col, Row, Input, Select ,InputNumber } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import  ChildDrawer from './ChildDrawer';
+import axios from 'axios';
 const { Option } = Select;
 
 
@@ -58,9 +59,10 @@ export default class AddClient extends React.Component {
   //保存客户端
   saveClientEvent=(e)=>{
     console.log(this.state);
+    //调用接口保存客户端
   }
 
-  //获取子组件的授权类型数据
+  //获取子组件的授权范围数据
   getGrantScopeDate=(data)=>{
     this.setState({
       grantScopeData:data
@@ -118,25 +120,25 @@ export default class AddClient extends React.Component {
           });
         }
 
-                //获取子组件的重定向url数据
-                getPostOutRedirectUriDate=(data)=>{
-                  this.setState({
-                    postOutRedirectUriData:data
-                  });
-                  console.log(data);
-                }
-                //新增重定向url事件
-                addPostOutRedirectUriEvent=()=>{
-                  this.setState({
-                    childrenPostOutRedirectUriDrawer: true,
-                  });
-                }
-                //关闭重定向url事件
-                onPostOutRedirectUriDrawerClose=()=>{
-                  this.setState({
-                    childrenPostOutRedirectUriDrawer: false,
-                  });
-                }
+          //获取子组件的重定向url数据
+           getPostOutRedirectUriDate=(data)=>{
+            this.setState({
+              postOutRedirectUriData:data
+            });
+           }
+          //新增重定向url事件
+           addPostOutRedirectUriEvent=()=>{
+            this.setState({
+              childrenPostOutRedirectUriDrawer: true,
+            });
+          }
+          //关闭重定向url事件
+          onPostOutRedirectUriDrawerClose=()=>{
+            this.setState({
+              childrenPostOutRedirectUriDrawer: false,
+            });
+          }
+  //渲染页面
   render() {
     return (
       <>
