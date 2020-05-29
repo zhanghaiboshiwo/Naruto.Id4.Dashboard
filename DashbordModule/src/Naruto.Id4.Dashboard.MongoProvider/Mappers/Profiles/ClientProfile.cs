@@ -11,44 +11,37 @@ namespace Naruto.Id4.Dashboard.MongoProvider.Mappers.Profiles
     {
         public ClientProfile()
         {
-            CreateMap<ClientModel, Client>();
-            CreateMap<Entities.ClientCorsOrigin, string>()
+            CreateMap<ClientModel, Client>().ReverseMap();
+
+            CreateMap<ClientCorsOrigin, string>()
             .ConstructUsing(src => src.Origin)
             .ReverseMap()
-            .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src));
+            .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src)).ReverseMap();
 
-            //CreateMap<Entities.ClientIdPRestriction, string>()
-            //    .ConstructUsing(src => src.Provider)
-            //    .ReverseMap()
-            //    .ForMember(dest => dest.Provider, opt => opt.MapFrom(src => src));
+            CreateMap<ClientSecret, string>()
+           .ConstructUsing(src => src.Value)
+           .ReverseMap()
+           .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src)).ReverseMap();
 
-            //CreateMap<Entities.ClientClaim, Claim>(MemberList.None)
-            //    .ConstructUsing(src => new Claim(src.Type, src.Value))
-            //    .ReverseMap();
+            CreateMap<ClientGrantType, string>()
+            .ConstructUsing(src => src.GrantType)
+            .ReverseMap()
+            .ForMember(dest => dest.GrantType, opt => opt.MapFrom(src => src)).ReverseMap();
 
-            //CreateMap<Entities.ClientScope, string>()
-            //    .ConstructUsing(src => src.Scope)
-            //    .ReverseMap()
-            //    .ForMember(dest => dest.Scope, opt => opt.MapFrom(src => src));
+            CreateMap<ClientRedirectUri, string>()
+            .ConstructUsing(src => src.RedirectUri)
+            .ReverseMap()
+            .ForMember(dest => dest.RedirectUri, opt => opt.MapFrom(src => src)).ReverseMap();
 
-            //CreateMap<Entities.ClientPostLogoutRedirectUri, string>()
-            //    .ConstructUsing(src => src.PostLogoutRedirectUri)
-            //    .ReverseMap()
-            //    .ForMember(dest => dest.PostLogoutRedirectUri, opt => opt.MapFrom(src => src));
+            CreateMap<ClientPostLogoutRedirectUri, string>()
+            .ConstructUsing(src => src.PostLogoutRedirectUri)
+            .ReverseMap()
+            .ForMember(dest => dest.PostLogoutRedirectUri, opt => opt.MapFrom(src => src)).ReverseMap();
 
-            //CreateMap<Entities.ClientRedirectUri, string>()
-            //    .ConstructUsing(src => src.RedirectUri)
-            //    .ReverseMap()
-            //    .ForMember(dest => dest.RedirectUri, opt => opt.MapFrom(src => src));
-
-            //CreateMap<Entities.ClientGrantType, string>()
-            //    .ConstructUsing(src => src.GrantType)
-            //    .ReverseMap()
-            //    .ForMember(dest => dest.GrantType, opt => opt.MapFrom(src => src));
-
-            //CreateMap<Entities.ClientSecret, IdentityServer4.Models.Secret>(MemberList.Destination)
-            //    .ForMember(dest => dest.Type, opt => opt.Condition(srs => srs != null))
-            //    .ReverseMap();
+            CreateMap<ClientScope, string>()
+           .ConstructUsing(src => src.Scope)
+           .ReverseMap()
+           .ForMember(dest => dest.Scope, opt => opt.MapFrom(src => src)).ReverseMap();
         }
     }
 }

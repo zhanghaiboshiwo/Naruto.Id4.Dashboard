@@ -27,7 +27,7 @@ export default class ChildDrawer extends React.Component {
       var index=data.indexOf(item);
       if(index>=0){
         //更新数据
-       item.GrantType=e.target.value;
+       item.value=e.target.value;
        //修改数组
         data.splice(index,1,item);
         //更新重新状态
@@ -85,7 +85,7 @@ export default class ChildDrawer extends React.Component {
       renderItem={item => (
         <List.Item actions={[<a key={item.Id} onClick={e=>this.removeOnClick(item)}>删除</a>]}> 
           <List.Item.Meta
-            description={<Input  defaultValue={item.GrantType}  onChange={e=>this.inputChangeEvent(item,e)}/>}
+            description={<Input  defaultValue={item.value}  onChange={e=>this.inputChangeEvent(item,e)}/>}
           />
         </List.Item>
       )}

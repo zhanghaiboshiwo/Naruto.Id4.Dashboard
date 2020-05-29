@@ -2,6 +2,7 @@
 using MongoDB.Driver.Linq;
 using Naruto.Id4.Dashboard.Extensions;
 using Naruto.Id4.Dashboard.Model;
+using Naruto.Id4.Dashboard.MongoProvider.Mappers;
 using Naruto.Id4.Dashboard.Storage;
 using Naruto.Id4.Entities;
 using Naruto.MongoDB;
@@ -23,23 +24,51 @@ namespace Naruto.Id4.Dashboard.MongoProvider
         {
             mongoRepository = _mongoRepository;
         }
-        public Task<bool> AddUpdClient(ClientModel model)
+        public async Task<bool> AddUpdClient(ClientModel model)
         {
+            //参数校检
             model.IsNotNull();
+            //实体转换
+            var entity = model.ToEntity();
+            //定义返回值
+            var returnValue = true;
+            //验证新增修改
             if (model.Id.IsNullOrEmpty())
             {
-                // mongoRepository.Command<Client>().ReplaceOneAsync();
+                await mongoRepository.Command<Client>().AddAsync(entity);
             }
             else
             {
-
+                entity.Updated = DateTime.UtcNow;
+                returnValue = await mongoRepository.Command<Client>().ReplaceOneAsync(a => a.Id == entity.Id, entity);
             }
-            return default;
+            return returnValue;
         }
 
-        public Task<ClientModel> GetClient(string id)
+        /// <summary>
+        /// 根据id删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteClientById(string id)
         {
-            throw new NotImplementedException();
+            return await mongoRepository.Command<Client>().DeleteAsync(a => a.Id == id);
+        }
+        /// <summary>
+        /// 获取客户端数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ClientModel> GetClient(string id)
+        {
+            id.IsNotNull();
+            //获取客户端
+            var client = await mongoRepository.Query<Client>().FirstOrDefaultAsync(a => a.Id == id);
+            if (client == null)
+            {
+                return default;
+            }
+            return client.ToModel();
         }
 
         public async Task<Tuple<List<ClientViewModel>, int>> GetClients(SearchClientModel search)
@@ -47,14 +76,16 @@ namespace Naruto.Id4.Dashboard.MongoProvider
             search.IsNotNull();
             //获取数据
             var list = await mongoRepository.Query<Client>().AsQueryable()
-                  .WhereIf(!string.IsNullOrWhiteSpace(search.Keyword), a => a.ClientId.Contains(search.Keyword) || a.ClientName.Contains(search.Keyword))
+                  .WhereIf(!string.IsNullOrWhiteSpace(search.Keyword), a => a.ClientId.Contains(search.Keyword) || a.ClientName.Contains(search.Keyword)).OrderByDescending(a => a.Created)
                   .Select(a => new ClientViewModel
                   {
                       id = a.Id,
                       clientId = a.ClientId,
                       clientName = a.ClientName,
                       requireClientSecret = a.RequireClientSecret,
-                      requireConsent = a.RequireConsent
+                      requireConsent = a.RequireConsent,
+                      enabled = a.Enabled,
+                      description = a.Description
                   }).PageBy(search.Page, search.PageSize).ToListAsync();
             //获取总条数
             var count = await mongoRepository.Query<Client>().AsQueryable()
@@ -96,13 +127,38 @@ namespace Naruto.Id4.Dashboard.MongoProvider
         }
 
         /// <summary>
-        /// 根据id删除
+        /// 更改客户端的启用状态
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="enable"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteClientById(string id)
+        public async Task<bool> UpdateEnabled(string id, bool enabled)
         {
-            return await mongoRepository.Command<Client>().DeleteAsync(a => a.Id == id);
+            id.IsNotNull();
+            //修改
+            return await mongoRepository.Command<Client>().UpdateAsync(a => a.Id == id, new Dictionary<string, object>()
+            {
+               { "Enabled",enabled}
+            });
+        }
+
+        /// <summary>
+        /// 验证客户端是否存在
+        /// </summary>
+        /// <param name="id">主键id</param>
+        /// <param name="clientId">客户端id</param>
+        /// <returns></returns>
+        public async Task<bool> ExistsClientId(string id, string clientId)
+        {
+            clientId.IsNotNull();
+            //定义一个返回值
+            var returnValue = false;
+
+            if (id.IsNullOfEmpty())
+                returnValue = (await mongoRepository.Query<Client>().CountAsync(a => a.ClientId == clientId)) > 0;
+            else
+                returnValue = (await mongoRepository.Query<Client>().CountAsync(a => a.ClientId == clientId && a.Id != id)) > 0;
+            return returnValue;
         }
     }
 }

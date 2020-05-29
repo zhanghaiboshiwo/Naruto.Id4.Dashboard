@@ -122,7 +122,10 @@ export default class Client  extends React.Component {
                 </Col>
                 <Col span={1} style={{marginLeft:12}}>
                     <div>
-                      <AddClient/>
+                      <AddClient onReloadEvent={async()=>{
+                        await this.getDataAsync(this.state.keyword,1,this.state.pageSize);
+                        this.setState({current:1});
+                      }}/>
                     </div>
                 </Col>
             </Row>
@@ -144,10 +147,28 @@ export default class Client  extends React.Component {
                 }} >
                   <Column  title='客户端ID' dataIndex= 'clientId' key='clientId'  fixed='left'/>
                   <Column  title='客户端名称' dataIndex= 'clientName' key='clientName'  fixed='left'/>
+                  <Column  title='描述' dataIndex= 'description' key='description'  fixed='left'/>
+                  <Column  title='是否启用' dataIndex= 'enabled' key='enabled'  render={(enabled, record) => (
+                  <>
+                    <Switch checkedChildren="启用" unCheckedChildren="禁用" checked={enabled} onChange={async (checked,event)=>{
+                        //请求接口 更改状态
+                      var res= await axios.post(`/naruto/client/enabled/${record.id}`,qs.stringify({enabled:checked}) )
+                                          .catch(function (error) {
+                                            console.log(error);
+                                          });
+                      if(res.data!=null && res.data.status==0){
+                        //重新加载表格
+                        await this.getDataAsync(this.state.keyword,this.state.current,this.state.pageSize);
+                        return (message.success('操作成功'));
+                      }
+                      else{
+                        return (message.warning("操作失败"));
+                      }
+                    }}/>
+                  </> )}/>
                   <Column  title='是否需要秘钥' dataIndex= 'requireClientSecret' key='requireClientSecret'  render={(requireClientSecret, record) => (
                   <>
                     <Switch checkedChildren="开启" unCheckedChildren="关闭" checked={requireClientSecret} onChange={async (checked,event)=>{
-                      console.log(checked);
                         //请求接口 更改状态
                       var res= await axios.post(`/naruto/client/requireclientsecret/${record.id}`,qs.stringify({requireClientSecret:checked}) )
                                           .catch(function (error) {
@@ -181,7 +202,7 @@ export default class Client  extends React.Component {
                       }
                     }}/>
                   </>)}/>
-                  <Column  title='是否需要秘钥' dataIndex= 'requireClientSecret' key='requireClientSecret'  render={(text, record) => (
+                  <Column   dataIndex= 'action' key='action'  render={(text, record) => (
                <Space>
                 <a onClick={()=>{}}>编辑</a>
                 <Button type="link" danger onClick={()=>this.deleteClientEvent(text, record,this)}>删除

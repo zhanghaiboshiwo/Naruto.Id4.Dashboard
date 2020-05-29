@@ -45,11 +45,26 @@ namespace Naruto.Id4.Dashboard.Storage
         /// <param name="requireClientSecret"></param>
         /// <returns></returns>
         Task<bool> UpdateRequireConsent(string id, bool requireConsent);
+
+        /// <summary>
+        /// 更改客户端的启用状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="enabled"></param>
+        /// <returns></returns>
+        Task<bool> UpdateEnabled(string id, bool enabled);
         /// <summary>
         /// 根据id删除
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         Task<bool> DeleteClientById(string id);
+        /// <summary>
+        /// 验证客户端是否存在
+        /// </summary>
+        /// <param name="id">主键id</param>
+        /// <param name="clientId">客户端id</param>
+        /// <returns></returns>
+        Task<bool> ExistsClientId(string id, string clientId);
     }
 }

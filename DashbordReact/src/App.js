@@ -46,7 +46,7 @@ class App extends React.Component {
                {this.state.menuItem}
               </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Naruto.Id4.Dashbord ©2020 Created by zhanghaibo</Footer>
+            <Footer style={{ textAlign: 'center' }}>Naruto.Id4.Dashbord ©{new Date().getFullYear()} Created by zhanghaibo</Footer>
           </Layout>
     );
   }
