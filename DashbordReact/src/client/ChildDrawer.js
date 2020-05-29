@@ -36,6 +36,10 @@ export default class ChildDrawer extends React.Component {
          });
       }
     }
+    componentWillUnmount() {
+      console.log(1);
+      this.setState({data:[]});
+    }
     //移除
     removeOnClick=(item)=>{
       //获取数组数据
@@ -63,7 +67,7 @@ export default class ChildDrawer extends React.Component {
         width={this.props.width}
         closable={true}
         maskClosable={false} 
-        destroyOnClose={true}
+        destroyOnClose
         onClose={this.props.onChildrenDrawerClose}
         footer={
           <div
