@@ -23,7 +23,7 @@ namespace Naruto.Id4.Dashboard.Storage
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<ClientModel> GetClient(string id);
+        Task<EditClientViewModel> GetClient(string id);
         /// <summary>
         /// 展示客户端集合
         /// </summary>

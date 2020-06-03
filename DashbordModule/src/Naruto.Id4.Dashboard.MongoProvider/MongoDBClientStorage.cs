@@ -32,6 +32,13 @@ namespace Naruto.Id4.Dashboard.MongoProvider
             var entity = model.ToEntity();
             //定义返回值
             var returnValue = true;
+            //更新密钥
+            entity.ClientSecrets.ForEach(a =>
+            {
+                //将密码的明文存储到描述字段中
+                a.Description = a.Value;
+                a.Value = a.Value.Sha256Encrypt();
+            });
             //验证新增修改
             if (model.Id.IsNullOrEmpty())
             {
@@ -59,7 +66,7 @@ namespace Naruto.Id4.Dashboard.MongoProvider
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<ClientModel> GetClient(string id)
+        public async Task<EditClientViewModel> GetClient(string id)
         {
             id.IsNotNull();
             //获取客户端
@@ -85,7 +92,8 @@ namespace Naruto.Id4.Dashboard.MongoProvider
                       requireClientSecret = a.RequireClientSecret,
                       requireConsent = a.RequireConsent,
                       enabled = a.Enabled,
-                      description = a.Description
+                      description = a.Description,
+                      
                   }).PageBy(search.Page, search.PageSize).ToListAsync();
             //获取总条数
             var count = await mongoRepository.Query<Client>().AsQueryable()

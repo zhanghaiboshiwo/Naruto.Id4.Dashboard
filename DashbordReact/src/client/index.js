@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col,Table,Input ,Button ,Modal,Space ,Switch,message  } from 'antd';
 import 'antd/dist/antd.css';
 import { ExclamationCircleOutlined  } from '@ant-design/icons';
-import AddClient from './add.js';
+import AddUpdClient from './addupd.js';
 import axios from 'axios';
 import config from '../config'
 import qs from 'qs'
@@ -122,7 +122,7 @@ export default class Client  extends React.Component {
                 </Col>
                 <Col span={1} style={{marginLeft:12}}>
                     <div>
-                      <AddClient onReloadEvent={async()=>{
+                      <AddUpdClient onReloadEvent={async()=>{
                         await this.getDataAsync(this.state.keyword,1,this.state.pageSize);
                         this.setState({current:1});
                       }}/>
@@ -203,8 +203,12 @@ export default class Client  extends React.Component {
                     }}/>
                   </>)}/>
                   <Column   dataIndex= 'action' key='action'  render={(text, record) => (
-               <Space>
-                <a onClick={()=>{}}>编辑</a>
+                  <Space>
+                  {/* 编辑按钮 */}
+                    <AddUpdClient onReloadEvent={async()=>{
+                      await this.getDataAsync(this.state.keyword,1,this.state.pageSize);
+                      this.setState({current:1});
+                    }} id={record.id}/>
                 <Button type="link" danger onClick={()=>this.deleteClientEvent(text, record,this)}>删除
                   </Button></Space>)}/>
                   </Table>

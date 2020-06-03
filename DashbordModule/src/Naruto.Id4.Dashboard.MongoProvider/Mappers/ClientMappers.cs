@@ -21,9 +21,9 @@ namespace Naruto.Id4.Dashboard.MongoProvider.Mappers
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static ClientModel ToModel(this Client entity)
+        public static EditClientViewModel ToModel(this Client entity)
         {
-            return Mapper.Map<ClientModel>(entity);
+            return Mapper.Map<EditClientViewModel>(entity);
         }
         /// <summary>
         /// 转换成实体

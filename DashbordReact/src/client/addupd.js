@@ -12,11 +12,12 @@ const {TextArea }=Input;
 axios.defaults.baseURL=config.apiUrl;
 
 export default class AddClient extends React.Component {
-
+  //构造函数
   constructor(props) {
     super(props);
     this.state = {
-       visible: false ,
+      visible: false,
+      initData:[],
       childrenGrantTypeDrawer:false,
       childrenGrantScopeDrawer:false,
       childrenOriginDrawer:false,
@@ -25,7 +26,6 @@ export default class AddClient extends React.Component {
       //存储数据字段
       grantTypeData:[],
       grantScopeData:[],
-      originDrawer:[],
       redirectUriData:[],
       postOutRedirectUriData:[],
       originData:[],
@@ -33,15 +33,55 @@ export default class AddClient extends React.Component {
       clientName:"",
       description:"",
       clientSecrets:[],
-      accessTokenLifetime:0,
-      identityTokenLifetime:0
+      accessTokenLifetime:3600,
+      identityTokenLifetime:300
     };
   }
+
   //显示弹出层
-  showDrawer = () => {
+  showDrawer =async () => {
+    //更新显示隐藏的状态
     this.setState({
       visible: true,
     });
+    //验证是否是编辑页面，是的话从接口获取数据 填充
+    if(this.props.id!=null){
+      var res=await axios.get(`/naruto/client/${this.props.id}`)
+      console.log(res);
+      //验证接口返回参
+      if(res.data==null || res.data.status!=0){
+        return (message.warning(res.data!=null?res.data.msg:"操作失败"));
+      }
+      else{
+        var clientData=res.data.data;
+        //修改数据字段
+        var grantTypeData=[];
+        var grantScopeData=[];
+        var redirectUriData=[];
+        var postOutRedirectUriData=[];
+        var originData=[];
+
+        clientData.allowedGrantTypes.map((item,i)=>grantTypeData.push({key:Math.random(),value:item}));
+        clientData.allowedScopes.map((item,i)=>grantScopeData.push({key:Math.random(),value:item}));
+        clientData.redirectUris.map((item,i)=>redirectUriData.push({key:Math.random(),value:item}));
+        clientData.postLogoutRedirectUris.map((item,i)=>postOutRedirectUriData.push({key:Math.random(),value:item}));
+        clientData.allowedCorsOrigins.map((item,i)=>originData.push({key:Math.random(),value:item}));
+        //重新设置数据
+        this.setState({
+          grantTypeData:grantTypeData,
+          grantScopeData:grantScopeData,
+          redirectUriData:redirectUriData,
+          postOutRedirectUriData:postOutRedirectUriData,
+          originData:originData,
+          clientId:clientData.clientId,
+          clientName:clientData.clientName,
+          description:clientData.description,
+          clientSecrets:clientData.clientSecrets,
+          accessTokenLifetime:clientData.accessTokenLifetime,
+          identityTokenLifetime:clientData.identityTokenLifetime,
+        });
+      }
+     }
   };
   //关闭弹出层
   onClose = () => {
@@ -54,6 +94,7 @@ export default class AddClient extends React.Component {
     this.setState({
       childrenGrantTypeDrawer: true,
     });
+    this.child.setData(this.state.grantTypeData);
   }
   //关闭授权类型事件
   onGrantTypeDrawerClose=()=>{
@@ -66,13 +107,12 @@ export default class AddClient extends React.Component {
     this.setState({
       grantTypeData:data
     });
-    console.log(data);
   }
   //保存客户端
   saveClientEvent=async (ts)=>{
-    console.log(this.state);
     //调用接口保存客户端
    var res= await axios.post("/naruto/client",{
+    Id:this.props.id,
     AllowedGrantTypes:this.state.grantTypeData.map((item,i)=>item.value),
     AllowedScopes:this.state.grantScopeData.map((item,i)=>item.value),
     RedirectUris:this.state.redirectUriData.map((item,i)=>item.value),
@@ -85,6 +125,9 @@ export default class AddClient extends React.Component {
     AccessTokenLifetime:this.state.accessTokenLifetime,
     IdentityTokenLifetime:this.state.identityTokenLifetime
    });
+   //测试代码 测试能否清空子节点的数据
+   this.child.emptyDataEvent();
+
    if(res.data!=null && res.data.status==0){
       //关闭弹出层
       ts.onClose();
@@ -103,7 +146,6 @@ export default class AddClient extends React.Component {
     this.setState({
       grantScopeData:data
     });
-    console.log(data);
   }
   //新增授权范围事件
   addGrantScopeEvent=()=>{
@@ -122,7 +164,6 @@ export default class AddClient extends React.Component {
       this.setState({
         originData:data
       });
-      console.log(data);
     }
     //新增跨域来源事件
     addOriginEvent=()=>{
@@ -141,7 +182,6 @@ export default class AddClient extends React.Component {
           this.setState({
             redirectUriData:data
           });
-          console.log(data);
         }
         //新增重定向url事件
         addRedirectUriEvent=()=>{
@@ -174,15 +214,23 @@ export default class AddClient extends React.Component {
               childrenPostOutRedirectUriDrawer: false,
             });
           }
+          //获取子组件的对象信息
+          childEvent=(child)=>{
+              this.child=child;
+          }
   //渲染页面
   render() {
     return (
       <>
+      {/* 根据id 修改标题 */}
+      {this.props.id==null?
         <Button type="primary"  size="large" onClick={this.showDrawer}>
           <PlusOutlined />新增客户端
         </Button>
+        :<a onClick={this.showDrawer}>编辑</a>
+      }
         <Drawer
-          title="新增客户端"
+          title={this.props.id==null?"新增客户端":"编辑客户端"}
           width={650}
           onClose={this.onClose}
           visible={this.state.visible}
@@ -207,112 +255,101 @@ export default class AddClient extends React.Component {
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item
-                  name="ClientId"
                   label="客户端Id"
                   rules={[{ required: true, message: '请输入客户端Id' }]}>
-                <Input placeholder="请输入客户端Id" onChange={(e)=>this.setState({clientId:e.target.value})}/>
+                <Input placeholder="请输入客户端Id" onChange={(e)=>this.setState({clientId:e.target.value})} value={this.state.clientId}/>
                 </Form.Item>
               </Col>
               <Col span={11} offset={5}>
               <Form.Item
-                  name="GrantType"
                   label="授权类型">
               <Button type="primary"  size="large" onClick={this.addGrantTypeEvent}>
               <PlusOutlined />新增 
               </Button>
-              <ChildDrawer GetData={this.getGrantTypeDate} childrenDrawer={this.state.childrenGrantTypeDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
+              <ChildDrawer GetData={this.getGrantTypeDate} onRef={this.childEvent} childrenDrawer={this.state.childrenGrantTypeDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item
-                  name="ClientName"
                   label="客户端名称"
                   rules={[{ required: true, message: '请输入客户端名称' }]}>
-                <Input placeholder="请输入客户端名称" onChange={(e)=>this.setState({clientName:e.target.value})}/>
+                <Input placeholder="请输入客户端名称" onChange={(e)=>this.setState({clientName:e.target.value})} value={this.state.clientName}/>
                 </Form.Item>
               </Col>
               <Col span={11} offset={5}>
               <Form.Item
-                  name="Scope"
                   label="授权范围">
               <Button type="primary"  size="large" onClick={this.addGrantScopeEvent}>
               <PlusOutlined />新增 
               </Button>
-              <ChildDrawer GetData={this.getGrantScopeDate} childrenDrawer={this.state.childrenGrantScopeDrawer} title="授权范围" width={500} onChildrenDrawerClose={this.onGrantScopeDrawerClose}/>
+              <ChildDrawer GetData={this.getGrantScopeDate} onRef={this.childEvent} childrenDrawer={this.state.childrenGrantScopeDrawer} title="授权范围" width={500} onChildrenDrawerClose={this.onGrantScopeDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
             <Row gutter={24}>
              <Col span={8}>
                <Form.Item
-                 name="Description"
                  label="客户端描述"
                  rules={[{  message: '请输入客户端描述' }]}>
-               <TextArea rows={4}  placeholder="请输入客户端描述" onChange={(e)=>this.setState({description:e.target.value})}/>
+               <TextArea rows={4}  placeholder="请输入客户端描述" onChange={(e)=>this.setState({description:e.target.value})} value={this.state.description}/>
                </Form.Item>
              </Col>
              <Col span={11} offset={5}>
               <Form.Item
-                  name="Origin"
                   label="跨域来源">
               <Button type="primary"  size="large"  onClick={this.addOriginEvent}>
               <PlusOutlined />新增 
               </Button>
-              <ChildDrawer GetData={this.getOriginDate} childrenDrawer={this.state.childrenOriginDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onOriginDrawerClose}/>
+              <ChildDrawer GetData={this.getOriginDate} onRef={this.childEvent} childrenDrawer={this.state.childrenOriginDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onOriginDrawerClose}/>
               </Form.Item>
               </Col>
            </Row>
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item
-                  name="ClientSecretsValue"
                   label="秘钥"
                   rules={[{ required: true, message: '' }]}>
                    <Input onChange={(e)=>{
                      this.setState({clientSecrets:[e.target.value]});
-                   }}/>
+                   }} value={this.state.clientSecrets[0]}/>
                 </Form.Item>
               </Col>
               <Col span={11} offset={5}>
               <Form.Item
-                  name="Redirect"
                   label="重定向Uri">
               <Button type="primary"  size="large" onClick={this.addRedirectUriEvent}>
               <PlusOutlined />新增 
               </Button>
-              <ChildDrawer GetData={this.getRedirectUriDate} childrenDrawer={this.state.childrenRedirectUriDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onRedirectUriDrawerClose}/>
+              <ChildDrawer GetData={this.getRedirectUriDate} onRef={this.childEvent} childrenDrawer={this.state.childrenRedirectUriDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onRedirectUriDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item
-                  name="IdentityTokenLifetime"
-                  label="身份周期"
+                  label="身份周期(s)"
                   rules={[{ required: true, message: 'Please choose the approver' }]}>
-                <InputNumber min={1} defaultValue={300}  placeholder="单位秒" onChange={(value)=>this.setState({identityTokenLifetime:value})}/>
+                <InputNumber min={1} defaultValue={this.state.identityTokenLifetime} value={this.state.identityTokenLifetime}  placeholder="单位秒" onChange={(value)=>this.setState({identityTokenLifetime:value})}/>
                 </Form.Item>
               </Col>
               <Col span={11} offset={5}>
               <Form.Item
-                  name="PostOut"
                   label="注销后重定向Uri">
               <Button type="primary"  size="large" onClick={this.addPostOutRedirectUriEvent}>
               <PlusOutlined />新增 
               </Button>
-              <ChildDrawer GetData={this.getPostOutRedirectUriDate} childrenDrawer={this.state.childrenPostOutRedirectUriDrawer} title="注销后重定向Uri" width={500} onChildrenDrawerClose={this.onPostOutRedirectUriDrawerClose}/>
+              <ChildDrawer GetData={this.getPostOutRedirectUriDate}  onRef={this.childEvent} childrenDrawer={this.state.childrenPostOutRedirectUriDrawer} title="注销后重定向Uri" width={500} onChildrenDrawerClose={this.onPostOutRedirectUriDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item
-                  name="AccessTokenLifetime"
-                  label="访问周期"
+                  label="访问周期(s)"
                   rules={[{ required: true, message: 'Please choose the dateTime' }]}>
-                 <InputNumber min={1} defaultValue={3600} placeholder="单位秒" onChange={(value)=>this.setState({accessTokenLifetime:value})}/>
+                 <InputNumber min={1} defaultValue={this.state.accessTokenLifetime} value={this.state.accessTokenLifetime} placeholder="单位秒" onChange={(value)=>this.setState({accessTokenLifetime:value})}/>
                 </Form.Item>
               </Col>
             </Row>

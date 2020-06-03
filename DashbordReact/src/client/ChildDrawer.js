@@ -10,6 +10,9 @@ export default class ChildDrawer extends React.Component {
       this.state = { 
         data:[]
       }
+      console.log(this.state);
+      //清空数据
+      this.props.onRef(this);
     }
   //添加数据
     pushList=()=>{
@@ -36,10 +39,6 @@ export default class ChildDrawer extends React.Component {
          });
       }
     }
-    componentWillUnmount() {
-      console.log(1);
-      this.setState({data:[]});
-    }
     //移除
     removeOnClick=(item)=>{
       //获取数组数据
@@ -53,12 +52,26 @@ export default class ChildDrawer extends React.Component {
         });
      }
     }
-
+    ///清空数据的事件
+    emptyDataEvent=()=>{
+      console.log(2);
+      this.setState({
+        data: []
+      });
+      console.log(this.state.data);
+    }
     //确认事件
     okEvent=(e)=>{
       this.props.GetData(this.state.data);
       //调用父组件的方法关闭当前层
       this.props.onChildrenDrawerClose();
+    }
+    setData=(data)=>{
+      this.setState({
+        data: data
+      });
+      console.log(this.state);
+      console.log(data);
     }
     render() { 
       return (  
