@@ -4,13 +4,11 @@ import { Drawer, Button, Input,List } from 'antd';
 
 // 授权类型弹出层
 export default class ChildDrawer extends React.Component {
- 
     constructor(props) {
       super(props);
       this.state = { 
         data:[]
       }
-      console.log(this.state);
       //清空数据
       this.props.onRef(this);
     }
@@ -66,12 +64,18 @@ export default class ChildDrawer extends React.Component {
       //调用父组件的方法关闭当前层
       this.props.onChildrenDrawerClose();
     }
-    setData=(data)=>{
-      this.setState({
-        data: data
-      });
+    componentDidUpdate(prevProps, prevState) {
+      console.log("update");
       console.log(this.state);
-      console.log(data);
+    }
+    setData= async(data)=>{
+     await this.setState((state)=>{
+        return {
+          data: data
+        }
+      });
+      console.log("setdata");
+      console.log(this.state);
     }
     render() { 
       return (  

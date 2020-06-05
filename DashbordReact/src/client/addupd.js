@@ -47,7 +47,6 @@ export default class AddClient extends React.Component {
     //验证是否是编辑页面，是的话从接口获取数据 填充
     if(this.props.id!=null){
       var res=await axios.get(`/naruto/client/${this.props.id}`)
-      console.log(res);
       //验证接口返回参
       if(res.data==null || res.data.status!=0){
         return (message.warning(res.data!=null?res.data.msg:"操作失败"));
@@ -90,11 +89,11 @@ export default class AddClient extends React.Component {
     });
   };
   //新增授权类型事件
-  addGrantTypeEvent=()=>{
+  addGrantTypeEvent=async()=>{
     this.setState({
       childrenGrantTypeDrawer: true,
     });
-    this.child.setData(this.state.grantTypeData);
+   await this.child.setData(this.state.grantTypeData);
   }
   //关闭授权类型事件
   onGrantTypeDrawerClose=()=>{
