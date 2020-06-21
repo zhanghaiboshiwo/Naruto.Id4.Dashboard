@@ -34,7 +34,8 @@ export default class AddClient extends React.Component {
       description:"",
       clientSecrets:[],
       accessTokenLifetime:3600,
-      identityTokenLifetime:300
+      identityTokenLifetime:300,
+
     };
   }
 
@@ -90,10 +91,10 @@ export default class AddClient extends React.Component {
   };
   //新增授权类型事件
   addGrantTypeEvent=async()=>{
+    const data=this.state.grantTypeData;
     this.setState({
       childrenGrantTypeDrawer: true,
     });
-   await this.child.setData(this.state.grantTypeData);
   }
   //关闭授权类型事件
   onGrantTypeDrawerClose=()=>{
@@ -265,7 +266,7 @@ export default class AddClient extends React.Component {
               <Button type="primary"  size="large" onClick={this.addGrantTypeEvent}>
               <PlusOutlined />新增 
               </Button>
-              <ChildDrawer GetData={this.getGrantTypeDate} onRef={this.childEvent} childrenDrawer={this.state.childrenGrantTypeDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
+              <ChildDrawer GetData={this.getGrantTypeDate} data={this.state.grantTypeData}  childrenDrawer={this.state.childrenGrantTypeDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>

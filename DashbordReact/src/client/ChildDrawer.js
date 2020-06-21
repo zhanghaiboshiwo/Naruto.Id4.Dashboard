@@ -9,8 +9,6 @@ export default class ChildDrawer extends React.Component {
       this.state = { 
         data:[]
       }
-      //清空数据
-      this.props.onRef(this);
     }
   //添加数据
     pushList=()=>{
@@ -56,25 +54,16 @@ export default class ChildDrawer extends React.Component {
       this.setState({
         data: []
       });
-      console.log(this.state.data);
     }
     //确认事件
     okEvent=(e)=>{
+      console.log(this.props.data);
       this.props.GetData(this.state.data);
       //调用父组件的方法关闭当前层
       this.props.onChildrenDrawerClose();
     }
     componentDidUpdate(prevProps, prevState) {
       console.log("update");
-      console.log(this.state);
-    }
-    setData= async(data)=>{
-     await this.setState((state)=>{
-        return {
-          data: data
-        }
-      });
-      console.log("setdata");
       console.log(this.state);
     }
     render() { 
@@ -100,9 +89,23 @@ export default class ChildDrawer extends React.Component {
           </div>
         }
       visible={this.props.childrenDrawer}> {/* 显示隐藏*/}
+      {this.props.data==null?<></>:
        <List
+       locale=""
       itemLayout="horizontal"
-      dataSource={this.state.data}
+      dataSource={this.props.data}
+      // dataSource={this.state.data}
+      renderItem={item => (
+        <List.Item actions={[<a key={item.Id} onClick={e=>this.removeOnClick(item)}>删除</a>]}> 
+          <List.Item.Meta
+            description={<Input  defaultValue={item.value}  onChange={e=>this.inputChangeEvent(item,e)}/>}
+          />
+        </List.Item>
+      )}/>
+      }
+     <List
+      itemLayout="horizontal"
+       dataSource={this.state.data}
       renderItem={item => (
         <List.Item actions={[<a key={item.Id} onClick={e=>this.removeOnClick(item)}>删除</a>]}> 
           <List.Item.Meta
