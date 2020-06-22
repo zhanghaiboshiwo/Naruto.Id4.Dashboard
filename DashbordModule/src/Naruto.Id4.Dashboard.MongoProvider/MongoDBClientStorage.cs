@@ -10,6 +10,7 @@ using Naruto.MongoDB.Interface;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Naruto.Id4.Dashboard.MongoProvider
 {
@@ -33,7 +34,11 @@ namespace Naruto.Id4.Dashboard.MongoProvider
             //定义返回值
             var returnValue = true;
             //更新密钥
-            entity.ClientSecrets.ForEach(a =>
+            if (entity.ClientSecrets?.FirstOrDefault() == null)
+            {
+                entity.ClientSecrets = null;
+            }
+            entity.ClientSecrets?.ForEach(a =>
             {
                 //将密码的明文存储到描述字段中
                 a.Description = a.Value;
@@ -46,8 +51,21 @@ namespace Naruto.Id4.Dashboard.MongoProvider
             }
             else
             {
-                entity.Updated = DateTime.UtcNow;
-                returnValue = await mongoRepository.Command<Client>().ReplaceOneAsync(a => a.Id == entity.Id, entity);
+                returnValue = await mongoRepository.Command<Client>().UpdateAsync(a => a.Id == entity.Id, new Dictionary<string, object>
+                {
+                     { "Updated",DateTime.UtcNow},
+                    { "ClientId",entity.ClientId},
+                    { "ClientName",entity.ClientName},
+                    { "Description",entity.Description},
+                    { "ClientSecrets",entity.ClientSecrets},
+                    { "IdentityTokenLifetime",entity.IdentityTokenLifetime},
+                    { "AccessTokenLifetime",entity.AccessTokenLifetime},
+                    { "AllowedGrantTypes",entity.AllowedGrantTypes},
+                    { "AllowedScopes",entity.AllowedScopes},
+                    { "RedirectUris",entity.RedirectUris},
+                    { "PostLogoutRedirectUris",entity.PostLogoutRedirectUris},
+                    { "AllowedCorsOrigins",entity.AllowedCorsOrigins},
+                });
             }
             return returnValue;
         }
@@ -93,7 +111,7 @@ namespace Naruto.Id4.Dashboard.MongoProvider
                       requireConsent = a.RequireConsent,
                       enabled = a.Enabled,
                       description = a.Description,
-                      
+
                   }).PageBy(search.Page, search.PageSize).ToListAsync();
             //获取总条数
             var count = await mongoRepository.Query<Client>().AsQueryable()

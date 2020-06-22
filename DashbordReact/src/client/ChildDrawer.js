@@ -48,24 +48,24 @@ export default class ChildDrawer extends React.Component {
         });
      }
     }
-    ///清空数据的事件
-    emptyDataEvent=()=>{
-      console.log(2);
-      this.setState({
-        data: []
-      });
-    }
+        //移除初始化数据s
+        removeInitOnClick=(item)=>{
+         this.props.removeInit(item);
+        }
+
     //确认事件
     okEvent=(e)=>{
-      console.log(this.props.data);
-      this.props.GetData(this.state.data);
+      var data= [...this.state.data,...this.props.data];
+      this.props.GetData(data);
+      console.log(data);
+       //清空数据
+       this.setState({
+        data:[]
+      });
       //调用父组件的方法关闭当前层
       this.props.onChildrenDrawerClose();
     }
-    componentDidUpdate(prevProps, prevState) {
-      console.log("update");
-      console.log(this.state);
-    }
+
     render() { 
       return (  
         <Drawer
@@ -74,7 +74,13 @@ export default class ChildDrawer extends React.Component {
         closable={true}
         maskClosable={false} 
         destroyOnClose
-        onClose={this.props.onChildrenDrawerClose}
+        onClose={()=>{
+          //清空数据
+          this.setState({
+            data:[]
+          });
+          this.props.onChildrenDrawerClose();
+        }}
         footer={
           <div
             style={{
@@ -89,22 +95,22 @@ export default class ChildDrawer extends React.Component {
           </div>
         }
       visible={this.props.childrenDrawer}> {/* 显示隐藏*/}
-      {this.props.data==null?<></>:
+
        <List
-       locale=""
+       locale={{	emptyText: ' '}} //设置数据为空的时候默认展示的内容
       itemLayout="horizontal"
       dataSource={this.props.data}
-      // dataSource={this.state.data}
       renderItem={item => (
-        <List.Item actions={[<a key={item.Id} onClick={e=>this.removeOnClick(item)}>删除</a>]}> 
+        <List.Item actions={[<a key={item.Id} onClick={e=>this.removeInitOnClick(item)}>删除</a>]}> 
           <List.Item.Meta
-            description={<Input  defaultValue={item.value}  onChange={e=>this.inputChangeEvent(item,e)}/>}
+            description={<Input  defaultValue={item.value}  />}
           />
         </List.Item>
       )}/>
-      }
+      
      <List
       itemLayout="horizontal"
+       locale={{emptyText: ' '}}
        dataSource={this.state.data}
       renderItem={item => (
         <List.Item actions={[<a key={item.Id} onClick={e=>this.removeOnClick(item)}>删除</a>]}> 

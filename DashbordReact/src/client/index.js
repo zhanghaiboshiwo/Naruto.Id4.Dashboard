@@ -61,7 +61,7 @@ export default class Client  extends React.Component {
          value.key=index;
        });
        //设置数据
-       this.setState({
+      await this.setState({
          data:data,
          total:res.data.recordCount
        });
@@ -97,6 +97,7 @@ export default class Client  extends React.Component {
         },
       });
     }
+
 
     //渲染
     render() { 
