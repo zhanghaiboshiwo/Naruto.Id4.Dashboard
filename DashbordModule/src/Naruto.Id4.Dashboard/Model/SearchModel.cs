@@ -17,5 +17,10 @@ namespace Naruto.Id4.Dashboard.Model
         /// 行数
         /// </summary>
         public int PageSize { get; set; }
+
+        /// <summary>
+        /// 关键字查询 
+        /// </summary>
+        public string Keyword { get; set; }
     }
 }

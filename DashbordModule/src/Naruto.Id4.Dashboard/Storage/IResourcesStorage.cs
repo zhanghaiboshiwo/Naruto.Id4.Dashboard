@@ -28,6 +28,14 @@ namespace Naruto.Id4.Dashboard.Storage
         /// 展示资源集合
         /// </summary>
         /// <returns></returns>
-        Task<List<ResourcesViewModel>> GetResourcess(SearchResourcessModel search);
+        Task<Tuple<List<ResourcesViewModel>, int>> GetResourcess(SearchResourcessModel search);
+
+        /// <summary>
+        /// 更改资源的状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="enabled"></param>
+        /// <returns></returns>
+        Task<bool> UpdateEnabled(string id, bool enabled);
     }
 }

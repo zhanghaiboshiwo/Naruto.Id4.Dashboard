@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Naruto.Id4.DashboardApi.Controllers
 {
+    
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -22,7 +23,6 @@ namespace Naruto.Id4.DashboardApi.Controllers
         {
             _logger = logger;
         }
-
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

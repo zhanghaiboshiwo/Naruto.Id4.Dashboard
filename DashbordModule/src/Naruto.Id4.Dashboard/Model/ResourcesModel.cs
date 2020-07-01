@@ -9,6 +9,7 @@ namespace Naruto.Id4.Dashboard.Model
     /// </summary>
     public class ResourcesModel
     {
+     
 
     }
 }
