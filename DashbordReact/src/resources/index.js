@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col,Table,Input ,Button ,Modal,Space ,Switch,message  } from 'antd';
 import 'antd/dist/antd.css';
 import { ExclamationCircleOutlined  } from '@ant-design/icons';
-import AddUpdResources from './addupd.js';
+import AddResource from './addupd.js';
 import axios from 'axios';
 import config from '../config'
 import qs from 'qs'
@@ -123,10 +123,10 @@ export default class Resources  extends React.Component {
                 </Col>
                 <Col span={1} style={{marginLeft:12}}>
                     <div>
-                      {/* <AddUpdResources onReloadEvent={async()=>{
+                      <AddResource onReloadEvent={async()=>{
                         await this.getDataAsync(this.state.keyword,1,this.state.pageSize);
                         this.setState({current:1});
-                      }}/> */}
+                      }}/>
                     </div>
                 </Col>
             </Row>

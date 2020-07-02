@@ -48,7 +48,7 @@ namespace Naruto.Id4.Dashboard.MongoProvider
                 id = a.Id,
                 name = a.Name,
                 updated = a.Updated
-            }).PageBy(search.Page, search.PageSize).ToListAsync();
+            }).OrderByDescending(a=>a.created).PageBy(search.Page, search.PageSize).ToListAsync();
 
             var count = await apiResourceQueryable.CountAsync();
             return Tuple.Create(list, count);
