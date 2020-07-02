@@ -37,5 +37,12 @@ namespace Naruto.Id4.Dashboard.Storage
         /// <param name="enabled"></param>
         /// <returns></returns>
         Task<bool> UpdateEnabled(string id, bool enabled);
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> DeleteById(string id);
     }
 }

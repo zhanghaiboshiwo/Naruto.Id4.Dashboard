@@ -70,6 +70,34 @@ export default class Resources  extends React.Component {
      this.setState({ loading: false });
     }
 
+ //删除客户端事件
+ deleteClientEvent=(text, record,ts)=>{
+  Modal.confirm({
+    title: '是否删除此客户端?',
+    icon: <ExclamationCircleOutlined />,
+    okText: 'Yes',
+    okType: 'danger',
+    cancelText: 'No',
+    async onOk(){
+      //请求接口
+      var res= await axios.delete(`/naruto/resources/${record.id}`)
+                          .catch(function (error) {
+                            console.log(error);
+                            });
+        if(res.data!=null && res.data.status==0){
+          //重新加载表格
+          await ts.getDataAsync(ts.state.keyword,ts.state.current,ts.state.pageSize);
+          return (message.success('操作成功'));
+        }
+        else{
+          return (message.warning("操作失败"));
+        }
+      },
+    onCancel() {
+      console.log(text);
+    },
+  });
+}
 
     //渲染
     render() { 

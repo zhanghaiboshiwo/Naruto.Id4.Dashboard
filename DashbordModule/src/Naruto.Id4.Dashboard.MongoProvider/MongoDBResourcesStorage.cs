@@ -39,7 +39,7 @@ namespace Naruto.Id4.Dashboard.MongoProvider
         {
             search.IsNotNull();
 
-            var apiResourceQueryable = mongoRepository.Query<ApiResource>().AsQueryable().WhereIf(string.IsNullOrWhiteSpace(search.Keyword), a => a.Name.Contains(search.Keyword));
+            var apiResourceQueryable = mongoRepository.Query<ApiResource>().AsQueryable().WhereIf(!string.IsNullOrWhiteSpace(search.Keyword), a => a.Name.Contains(search.Keyword));
             var list = await apiResourceQueryable.Select(a => new ResourcesViewModel
             {
                 created = a.Created,
@@ -68,6 +68,18 @@ namespace Naruto.Id4.Dashboard.MongoProvider
             {
                { "Enabled",enabled}
             });
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteById(string id)
+        {
+            id.IsNotNull();
+            //删除
+            return await mongoRepository.Command<ApiResource>().DeleteAsync(a => a.Id == id);
         }
     }
 }

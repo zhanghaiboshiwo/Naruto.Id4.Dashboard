@@ -39,5 +39,13 @@ namespace Naruto.Id4.Dashboard.Controllers
         /// <param name="enabled"></param>
         /// <returns></returns>
         public async Task<NarutoResult> UpdateEnabled(string id, [FromForm] bool enabled) => await resourceService.UpdateEnabled(id, enabled);
+
+        [HttpDelete("{id}")]
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<NarutoResult> DeleteById(string id) => await resourceService.DeleteById(id);
     }
 }
