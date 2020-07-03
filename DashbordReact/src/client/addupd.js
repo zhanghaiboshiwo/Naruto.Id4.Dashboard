@@ -325,7 +325,7 @@ export default class AddClient extends React.Component {
               <Col span={11} offset={5}>
               <Form.Item
                   label="授权类型">
-              <Button type="primary"  size="large" onClick={this.addGrantTypeEvent}>
+              <Button type="dashed"  size="large" onClick={this.addGrantTypeEvent}>
         <PlusOutlined />{this.props.id==null?"新增":"编辑"} 
               </Button>
               <ChildDrawer GetData={this.getGrantTypeDate} data={this.state.grantTypeData} removeInit={this.removeGrantTypeInit}  childrenDrawer={this.state.childrenGrantTypeDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
@@ -343,7 +343,7 @@ export default class AddClient extends React.Component {
               <Col span={11} offset={5}>
               <Form.Item
                   label="授权范围">
-              <Button type="primary"  size="large" onClick={this.addGrantScopeEvent}>
+              <Button type="dashed"  size="large" onClick={this.addGrantScopeEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
               <ChildDrawer GetData={this.getGrantScopeDate} data={this.state.grantScopeData} removeInit={this.removeGrantScopeInit} onRef={this.childEvent} childrenDrawer={this.state.childrenGrantScopeDrawer} title="授权范围" width={500} onChildrenDrawerClose={this.onGrantScopeDrawerClose}/>
@@ -361,7 +361,7 @@ export default class AddClient extends React.Component {
              <Col span={11} offset={5}>
               <Form.Item
                   label="跨域来源">
-              <Button type="primary"  size="large"  onClick={this.addOriginEvent}>
+              <Button type="dashed"  size="large"  onClick={this.addOriginEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
               <ChildDrawer GetData={this.getOriginDate} data={this.state.originData} removeInit={this.removeOriginDataInit}  onRef={this.childEvent} childrenDrawer={this.state.childrenOriginDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onOriginDrawerClose}/>
@@ -381,7 +381,7 @@ export default class AddClient extends React.Component {
               <Col span={11} offset={5}>
               <Form.Item
                   label="重定向Uri">
-              <Button type="primary"  size="large" onClick={this.addRedirectUriEvent}>
+              <Button type="dashed"  size="large" onClick={this.addRedirectUriEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
               <ChildDrawer GetData={this.getRedirectUriDate} data={this.state.redirectUriData} removeInit={this.removeRedirectUriInit} onRef={this.childEvent} childrenDrawer={this.state.childrenRedirectUriDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onRedirectUriDrawerClose}/>
@@ -399,7 +399,7 @@ export default class AddClient extends React.Component {
               <Col span={11} offset={5}>
               <Form.Item
                   label="注销后重定向Uri">
-              <Button type="primary"  size="large" onClick={this.addPostOutRedirectUriEvent}>
+              <Button type="dashed"  size="large" onClick={this.addPostOutRedirectUriEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
               <ChildDrawer GetData={this.getPostOutRedirectUriDate} data={this.state.postOutRedirectUriData} removeInit={this.removePostOutRedirectUriInit}  onRef={this.childEvent} childrenDrawer={this.state.childrenPostOutRedirectUriDrawer} title="注销后重定向Uri" width={500} onChildrenDrawerClose={this.onPostOutRedirectUriDrawerClose}/>

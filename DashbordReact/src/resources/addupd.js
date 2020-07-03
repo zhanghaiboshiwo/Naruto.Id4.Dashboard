@@ -48,7 +48,7 @@ export default class AddResource extends React.Component {
       }
         <Drawer
           title={this.props.id==null?"新增资源":"编辑资源"}
-          width={650}
+          width={450}
           onClose={this.onClose}
           visible={this.state.visible}
           bodyStyle={{ paddingBottom: 80 }}
@@ -95,6 +95,28 @@ export default class AddResource extends React.Component {
                   label="描　述"
                   labelAlign="left">
                 <TextArea rows={4}  placeholder="请输入描述" onChange={(e)=>this.setState({description:e.target.value})} value={this.state.description}/>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col>
+                <Form.Item
+                  label="Api范围"
+                  labelAlign="left">
+                 <Button type="dashed"  size="large" onClick={this.addPostOutRedirectUriEvent}>
+              <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
+              </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col>
+                <Form.Item
+                  label="Api秘钥"
+                  labelAlign="left">
+                 <Button type="dashed"  size="large" onClick={this.addPostOutRedirectUriEvent}>
+              <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
+              </Button>
                 </Form.Item>
               </Col>
             </Row>
