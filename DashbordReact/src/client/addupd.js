@@ -210,10 +210,6 @@ export default class AddClient extends React.Component {
               childrenPostOutRedirectUriDrawer: false,
             });
           }
-          //获取子组件的对象信息
-          childEvent=(child)=>{
-              this.child=child;
-          }
 
     //移除授权类型的初始化数据   
     removeGrantTypeInit=(item)=>{
@@ -328,7 +324,7 @@ export default class AddClient extends React.Component {
               <Button type="dashed"  size="large" onClick={this.addGrantTypeEvent}>
         <PlusOutlined />{this.props.id==null?"新增":"编辑"} 
               </Button>
-              <ChildDrawer GetData={this.getGrantTypeDate} data={this.state.grantTypeData} removeInit={this.removeGrantTypeInit}  childrenDrawer={this.state.childrenGrantTypeDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
+              <ChildDrawer GetData={this.getGrantTypeDate} data={this.state.grantTypeData} removeInit={this.removeGrantTypeInit}  childrenVisible={this.state.childrenGrantTypeDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
@@ -346,7 +342,7 @@ export default class AddClient extends React.Component {
               <Button type="dashed"  size="large" onClick={this.addGrantScopeEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ChildDrawer GetData={this.getGrantScopeDate} data={this.state.grantScopeData} removeInit={this.removeGrantScopeInit} onRef={this.childEvent} childrenDrawer={this.state.childrenGrantScopeDrawer} title="授权范围" width={500} onChildrenDrawerClose={this.onGrantScopeDrawerClose}/>
+              <ChildDrawer GetData={this.getGrantScopeDate} data={this.state.grantScopeData} removeInit={this.removeGrantScopeInit} childrenVisible={this.state.childrenGrantScopeDrawer} title="授权范围" width={500} onChildrenDrawerClose={this.onGrantScopeDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
@@ -364,7 +360,7 @@ export default class AddClient extends React.Component {
               <Button type="dashed"  size="large"  onClick={this.addOriginEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ChildDrawer GetData={this.getOriginDate} data={this.state.originData} removeInit={this.removeOriginDataInit}  onRef={this.childEvent} childrenDrawer={this.state.childrenOriginDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onOriginDrawerClose}/>
+              <ChildDrawer GetData={this.getOriginDate} data={this.state.originData} removeInit={this.removeOriginDataInit}   childrenVisible={this.state.childrenOriginDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onOriginDrawerClose}/>
               </Form.Item>
               </Col>
            </Row>
@@ -384,7 +380,7 @@ export default class AddClient extends React.Component {
               <Button type="dashed"  size="large" onClick={this.addRedirectUriEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ChildDrawer GetData={this.getRedirectUriDate} data={this.state.redirectUriData} removeInit={this.removeRedirectUriInit} onRef={this.childEvent} childrenDrawer={this.state.childrenRedirectUriDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onRedirectUriDrawerClose}/>
+              <ChildDrawer GetData={this.getRedirectUriDate} data={this.state.redirectUriData} removeInit={this.removeRedirectUriInit}  childrenVisible={this.state.childrenRedirectUriDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onRedirectUriDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
@@ -402,7 +398,7 @@ export default class AddClient extends React.Component {
               <Button type="dashed"  size="large" onClick={this.addPostOutRedirectUriEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ChildDrawer GetData={this.getPostOutRedirectUriDate} data={this.state.postOutRedirectUriData} removeInit={this.removePostOutRedirectUriInit}  onRef={this.childEvent} childrenDrawer={this.state.childrenPostOutRedirectUriDrawer} title="注销后重定向Uri" width={500} onChildrenDrawerClose={this.onPostOutRedirectUriDrawerClose}/>
+              <ChildDrawer GetData={this.getPostOutRedirectUriDate} data={this.state.postOutRedirectUriData} removeInit={this.removePostOutRedirectUriInit}  childrenVisible={this.state.childrenPostOutRedirectUriDrawer} title="注销后重定向Uri" width={500} onChildrenDrawerClose={this.onPostOutRedirectUriDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>

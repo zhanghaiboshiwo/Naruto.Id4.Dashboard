@@ -94,7 +94,7 @@ export default class ChildDrawer extends React.Component {
             </Button>
           </div>
         }
-      visible={this.props.childrenDrawer}> {/* 显示隐藏*/}
+      visible={this.props.childrenVisible}> {/* 显示隐藏*/}
 
        <List
        locale={{	emptyText: ' '}} //设置数据为空的时候默认展示的内容

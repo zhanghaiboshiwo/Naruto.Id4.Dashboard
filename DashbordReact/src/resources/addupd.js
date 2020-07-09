@@ -3,8 +3,8 @@ import 'antd/dist/antd.css';
 import { Drawer, Form, Button, Col, Row, Input, Select ,InputNumber ,message} from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import config from '../config'
-
+import config from '../config';
+import  ChildDrawer from './ChildDrawer';
 const { Option } = Select;
 const {TextArea }=Input;
 //配置全局参数
@@ -16,6 +16,8 @@ export default class AddResource extends React.Component {
     super(props);
     this.state = {
       visible: false,
+      apiScopeVisible:false,
+      apiSecretsVisible:false
     };
   }
     //关闭弹出层
@@ -24,7 +26,6 @@ export default class AddResource extends React.Component {
           visible: false,
         });
       };
-
   //显示弹出层
   showDrawer =async () => {
     //更新显示隐藏的状态
@@ -35,6 +36,28 @@ export default class AddResource extends React.Component {
     if(this.props.id!=null){
      }
   };
+  //显示api范围弹出层
+  addUpdApiScopeEvent=()=>{
+    this.setState({
+      apiScopeVisible:true
+    });
+  }
+  //显示api秘钥弹出层
+  addUpdApiSecretsEvent=()=>{
+    this.setState({
+      apiSecretsVisible:true
+    });
+  }
+  ApiScopeClose=()=>{
+    this.setState({
+      apiScopeVisible:false
+    });
+  }
+  ApiSecretsClose=()=>{
+    this.setState({
+      apiSecretsVisible:false
+    });
+  }
   //渲染页面
   render() {
     return (
@@ -103,9 +126,10 @@ export default class AddResource extends React.Component {
                 <Form.Item
                   label="Api范围"
                   labelAlign="left">
-                 <Button type="dashed"  size="large" onClick={this.addPostOutRedirectUriEvent}>
+                 <Button type="dashed"  size="large" onClick={this.addUpdApiScopeEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
+              <ChildDrawer GetData={this.getGrantTypeDate}  childrenVisible={this.state.apiScopeVisible} title="Api范围" width={500} onChildrenDrawerClose={this.ApiScopeClose}/>
                 </Form.Item>
               </Col>
             </Row>
@@ -114,9 +138,10 @@ export default class AddResource extends React.Component {
                 <Form.Item
                   label="Api秘钥"
                   labelAlign="left">
-                 <Button type="dashed"  size="large" onClick={this.addPostOutRedirectUriEvent}>
+                 <Button type="dashed"  size="large" onClick={this.addUpdApiSecretsEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
+              <ChildDrawer GetData={this.getGrantTypeDate}   childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={500} onChildrenDrawerClose={this.ApiSecretsClose}/>
                 </Form.Item>
               </Col>
             </Row>
