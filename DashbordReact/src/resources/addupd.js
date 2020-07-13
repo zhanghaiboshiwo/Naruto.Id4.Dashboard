@@ -4,7 +4,7 @@ import { Drawer, Form, Button, Col, Row, Input, Select ,InputNumber ,message} fr
 import { PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import config from '../config';
-import  ChildDrawer from './ChildDrawer';
+import  ScopeChildDrawer from './ScopeChildDrawer';
 const { Option } = Select;
 const {TextArea }=Input;
 //配置全局参数
@@ -129,7 +129,7 @@ export default class AddResource extends React.Component {
                  <Button type="dashed"  size="large" onClick={this.addUpdApiScopeEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ChildDrawer GetData={this.getGrantTypeDate}  childrenVisible={this.state.apiScopeVisible} title="Api范围" width={500} onChildrenDrawerClose={this.ApiScopeClose}/>
+              <ScopeChildDrawer GetData={this.getGrantTypeDate}  childrenVisible={this.state.apiScopeVisible} title="Api范围" width={600} onChildrenDrawerClose={this.ApiScopeClose}/>
                 </Form.Item>
               </Col>
             </Row>
@@ -141,7 +141,7 @@ export default class AddResource extends React.Component {
                  <Button type="dashed"  size="large" onClick={this.addUpdApiSecretsEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ChildDrawer GetData={this.getGrantTypeDate}   childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={500} onChildrenDrawerClose={this.ApiSecretsClose}/>
+              <ScopeChildDrawer GetData={this.getGrantTypeDate}   childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={500} onChildrenDrawerClose={this.ApiSecretsClose}/>
                 </Form.Item>
               </Col>
             </Row>
