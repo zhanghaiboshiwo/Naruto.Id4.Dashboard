@@ -71,7 +71,7 @@ export default class AddResource extends React.Component {
       }
         <Drawer
           title={this.props.id==null?"新增资源":"编辑资源"}
-          width={450}
+          width={550}
           onClose={this.onClose}
           visible={this.state.visible}
           bodyStyle={{ paddingBottom: 80 }}
@@ -129,7 +129,7 @@ export default class AddResource extends React.Component {
                  <Button type="dashed"  size="large" onClick={this.addUpdApiScopeEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ScopeChildDrawer GetData={this.getGrantTypeDate}  childrenVisible={this.state.apiScopeVisible} title="Api范围" width={600} onChildrenDrawerClose={this.ApiScopeClose}/>
+              <ScopeChildDrawer GetData={this.getGrantTypeDate}  childrenVisible={this.state.apiScopeVisible} title="Api范围" width={680} onChildrenDrawerClose={this.ApiScopeClose}/>
                 </Form.Item>
               </Col>
             </Row>
@@ -141,7 +141,7 @@ export default class AddResource extends React.Component {
                  <Button type="dashed"  size="large" onClick={this.addUpdApiSecretsEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ScopeChildDrawer GetData={this.getGrantTypeDate}   childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={500} onChildrenDrawerClose={this.ApiSecretsClose}/>
+              <ScopeChildDrawer GetData={this.getGrantTypeDate}   childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={680} onChildrenDrawerClose={this.ApiSecretsClose}/>
                 </Form.Item>
               </Col>
             </Row>

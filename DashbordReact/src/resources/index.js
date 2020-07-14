@@ -149,7 +149,7 @@ export default class Resources  extends React.Component {
               
                   <Column  title='名称' dataIndex= 'name' key='name'  fixed='left'/>
                 
-                  <Column  title='是否启用' dataIndex= 'enabled' key='enabled'  render={(enabled, record) => (
+                  <Column  title='是否启用' dataIndex= 'enabled' key='enabled' fixed='left'  render={(enabled, record) => (
                   <>
                     <Switch checkedChildren="启用" unCheckedChildren="禁用" checked={enabled} onChange={async (checked,event)=>{
                         //请求接口 更改状态
@@ -170,7 +170,7 @@ export default class Resources  extends React.Component {
                   <Column  title='描述' dataIndex= 'description' key='description'  fixed='left'/>
                   <Column  title='创建时间' dataIndex= 'created' key='created'  fixed='left'/>
                   <Column  title='更新时间' dataIndex= 'updated' key='updated'  fixed='left'/>
-                  <Column   dataIndex= 'action' key='action'  render={(text, record) => (
+                  <Column   dataIndex= 'action' key='action' fixed='left'  render={(text, record) => (
                   <Space>
                   {/* 编辑按钮 */}
                     {/* <AddUpdResources onReloadEvent={async()=>{
