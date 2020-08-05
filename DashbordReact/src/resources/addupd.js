@@ -15,6 +15,9 @@ export default class AddResource extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      name:"",//名称
+      description:"",//描述
+      displayName:"",//显示名
       visible: false,
       apiScopeVisible:false,
       apiSecretsVisible:false
@@ -58,6 +61,10 @@ export default class AddResource extends React.Component {
       apiSecretsVisible:false
     });
   }
+
+  saveEvent=(e)=>{
+    console.log(this.state);
+  }
   //渲染页面
   render() {
     return (
@@ -85,7 +92,7 @@ export default class AddResource extends React.Component {
               <Button onClick={this.onClose} style={{ marginRight: 8 }}>
                 返回
               </Button>
-              <Button onClick={()=>this.saveClientEvent(this)} type="primary">
+              <Button onClick={()=>this.saveEvent(this)} type="primary">
                 保存
               </Button>
             </div>
@@ -98,7 +105,7 @@ export default class AddResource extends React.Component {
                   label="名　称"
                   labelAlign="left"
                   rules={[{ required: true, message: '请输入名称' }]}>
-                <Input placeholder="请输入名称" onChange={(e)=>this.setState({clientId:e.target.value})} value={this.state.clientId}/>
+                <Input placeholder="请输入名称" onChange={(e)=>this.setState({name:e.target.value})} value={this.state.name}/>
                 </Form.Item>
               </Col>
             </Row>
@@ -108,7 +115,7 @@ export default class AddResource extends React.Component {
                   label="显示名"
                   labelAlign="left"
                   rules={[{ required: true, message: '请输入显示名' }]}>
-                <Input placeholder="请输入显示名" onChange={(e)=>this.setState({clientId:e.target.value})} value={this.state.clientId}/>
+                <Input placeholder="请输入显示名" onChange={(e)=>this.setState({displayName:e.target.value})} value={this.state.displayName}/>
                 </Form.Item>
               </Col>
             </Row>
