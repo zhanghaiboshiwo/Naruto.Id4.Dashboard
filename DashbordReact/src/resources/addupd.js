@@ -20,7 +20,9 @@ export default class AddResource extends React.Component {
       displayName:"",//显示名
       visible: false,
       apiScopeVisible:false,
-      apiSecretsVisible:false
+      apiSecretsVisible:false,
+      apiScopeData:[]//api范围 数据
+      ,apiSecretsData:[]//api秘钥数据
     };
   }
     //关闭弹出层
@@ -45,6 +47,7 @@ export default class AddResource extends React.Component {
       apiScopeVisible:true
     });
   }
+
   //显示api秘钥弹出层
   addUpdApiSecretsEvent=()=>{
     this.setState({
@@ -64,6 +67,18 @@ export default class AddResource extends React.Component {
 
   saveEvent=(e)=>{
     console.log(this.state);
+  }
+//从子组件 获取 api范围保存的数据 存储到当前的state中
+  getScopeDate=(data)=>{
+    this.setState({
+      apiScopeData:data
+    });
+  }
+//从子组件 获取 api秘钥保存的数据 存储到当前的state中
+  getSecretsDate=(data)=>{
+    this.setState({
+      apiSecretsData:data
+    });
   }
   //渲染页面
   render() {
@@ -136,7 +151,7 @@ export default class AddResource extends React.Component {
                  <Button type="dashed"  size="large" onClick={this.addUpdApiScopeEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ScopeChildDrawer GetData={this.getGrantTypeDate}  childrenVisible={this.state.apiScopeVisible} title="Api范围" width={680} onChildrenDrawerClose={this.ApiScopeClose}/>
+              <ScopeChildDrawer GetData={this.getScopeDate} data={this.state.apiScopeData} closeEvent={this.ApiScopeClose}  childrenVisible={this.state.apiScopeVisible} title="Api范围" width={680} onChildrenDrawerClose={this.ApiScopeClose}/>
                 </Form.Item>
               </Col>
             </Row>
@@ -148,7 +163,7 @@ export default class AddResource extends React.Component {
                  <Button type="dashed"  size="large" onClick={this.addUpdApiSecretsEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ScopeChildDrawer GetData={this.getGrantTypeDate}   childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={680} onChildrenDrawerClose={this.ApiSecretsClose}/>
+              <ScopeChildDrawer GetData={this.getSecretsDate} data={this.state.apiSecretsData} closeEvent={this.ApiSecretsClose}  childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={680} onChildrenDrawerClose={this.ApiSecretsClose}/>
                 </Form.Item>
               </Col>
             </Row>

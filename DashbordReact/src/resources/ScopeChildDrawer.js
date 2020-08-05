@@ -9,6 +9,7 @@ export default class ChildDrawer extends React.Component {
       this.state = { 
         data:[]
       }
+      console.log(this.props.data);
     }
     //添加数据
     pushList=()=>{
@@ -55,8 +56,20 @@ export default class ChildDrawer extends React.Component {
               });
            }
         }
+        //保存数据
         okEvent=()=>{
-          console.log(this.state.data);
+          console.log(this.props.data);
+          //合并两个数组 已存在的数据和 添加的数据
+          var data=[...this.state.data,...this.props.data];
+          //将数据传递给父组件
+          this.props.GetData(data);
+          //将当前页面的值清空
+          this.setState({
+           data:[]
+          });
+          console.log(data);
+          //关闭当前窗体
+          this.props.closeEvent();
         }
         //删除数据
         delete=(index)=>{
@@ -98,7 +111,8 @@ export default class ChildDrawer extends React.Component {
         }
       visible={this.props.childrenVisible}> {/* 显示隐藏*/}
 
-        <Table dataSource={this.state.data} pagination={false}>
+        {/* 修改赋值操作 */}
+        <Table dataSource={[...this.props.data]} pagination={false}  locale={{	emptyText: ' '}}>
           <Column  title='范围名称' dataIndex= 'name' key='name'  fixed='left' render={(text, record, index)=>(
             <><Input  onChange={e=>this.inputChangeEvent(index,record,"name",e)}/></>
           )}/>
@@ -109,6 +123,26 @@ export default class ChildDrawer extends React.Component {
             <><Input onChange={e=>this.inputChangeEvent(index,record,"description",e)}/></>
           )}/>
           <Column  title='是否显示屏幕' dataIndex= 'required' key='required'  fixed='left' render={(text, record, index)=>(
+            <> <Switch checkedChildren="是" unCheckedChildren="否" onChange={(checked,event)=>{this.switchChangeEvent(index,record,checked)}}/></>
+          )}/>
+           <Column  dataIndex= 'action' key='action'  render={(text, record,index) => (
+                  <>
+                <Button type="link" danger onClick={()=>this.delete(index)}>删除
+                  </Button></>)}/>
+        </Table>
+
+        {/* 新增操作 */}
+        <Table dataSource={(this.state.data)} pagination={false}  locale={{	emptyText: ' '}}>
+          <Column   dataIndex= 'name' key='name'  fixed='left' render={(text, record, index)=>(
+            <><Input  onChange={e=>this.inputChangeEvent(index,record,"name",e)}/></>
+          )}/>
+          <Column   dataIndex= 'displayName' key='displayName'  fixed='left' render={(text,record, index)=>(
+            <><Input onChange={e=>this.inputChangeEvent(index,record,"displayName",e)}/></>
+          )}/>
+          <Column   dataIndex= 'description' key='description'  fixed='left' render={(text, record, index)=>(
+            <><Input onChange={e=>this.inputChangeEvent(index,record,"description",e)}/></>
+          )}/>
+          <Column   dataIndex= 'required' key='required'  fixed='left' render={(text, record, index)=>(
             <> <Switch checkedChildren="是" unCheckedChildren="否" onChange={(checked,event)=>{this.switchChangeEvent(index,record,checked)}}/></>
           )}/>
            <Column  dataIndex= 'action' key='action'  render={(text, record,index) => (
