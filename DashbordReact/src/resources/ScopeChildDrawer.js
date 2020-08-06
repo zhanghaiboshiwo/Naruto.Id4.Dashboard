@@ -2,6 +2,7 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { Drawer, Button, Input,Table,Switch } from 'antd';
 const {Column} =Table;
+
 // 授权类型弹出层
 export default class ChildDrawer extends React.Component {
     constructor(props) {
@@ -41,6 +42,17 @@ export default class ChildDrawer extends React.Component {
              });
           }
         }
+         //修改的table输入框的事件
+         initInputChangeEvent=(index,record,key,e)=>{
+          //获取数组数据
+          var data=  [...this.props.data];
+          if(index>=0){
+            //更新数据
+            record[key]=e.target.value;
+           //修改数组
+            data[index]=record;
+          }
+        }
         //切换框的事件
         switchChangeEvent=(index,record,checked)=>{
            //获取数组数据
@@ -56,6 +68,17 @@ export default class ChildDrawer extends React.Component {
               });
            }
         }
+        //修改table的切换框的事件
+        initSwitchChangeEvent=(index,record,checked)=>{
+          //获取数组数据
+          var data=  [...this.props.data];
+          if(index>=0){
+            //更新数据
+            record["required"]=checked;
+           //修改数组
+            data[index]=record;
+          }
+       }
         //保存数据
         okEvent=()=>{
           console.log(this.props.data);
@@ -79,8 +102,11 @@ export default class ChildDrawer extends React.Component {
             this.setState({
               data: data
             }); 
-            console.log(data);
         }
+         //删除数据
+         initDelete=(index)=>{
+          this.props.removeInit(index);
+      }
     render() { 
       return (  
         <Drawer
@@ -112,38 +138,38 @@ export default class ChildDrawer extends React.Component {
       visible={this.props.childrenVisible}> {/* 显示隐藏*/}
 
         {/* 修改赋值操作 */}
-        <Table dataSource={[...this.props.data]} pagination={false}  locale={{	emptyText: ' '}}>
-          <Column  title='范围名称' dataIndex= 'name' key='name'  fixed='left' render={(text, record, index)=>(
-            <><Input  onChange={e=>this.inputChangeEvent(index,record,"name",e)}/></>
+        <Table dataSource={this.props.data} pagination={false} locale={{	emptyText: ' '}}>
+          <Column  title='名称' dataIndex= 'name' key='name'  fixed='left' render={(text, record, index)=>(
+            <><Input defaultValue={record.name}  onChange={e=>this.initInputChangeEvent(index,record,"name",e)}/></>
           )}/>
           <Column  title='显示名' dataIndex= 'displayName' key='displayName'  fixed='left' render={(text,record, index)=>(
-            <><Input onChange={e=>this.inputChangeEvent(index,record,"displayName",e)}/></>
+            <><Input defaultValue={record.displayName} onChange={e=>this.initInputChangeEvent(index,record,"displayName",e)}/></>
           )}/>
           <Column  title='描述' dataIndex= 'description' key='description'  fixed='left' render={(text, record, index)=>(
-            <><Input onChange={e=>this.inputChangeEvent(index,record,"description",e)}/></>
+            <><Input defaultValue={record.description} onChange={e=>this.initInputChangeEvent(index,record,"description",e)}/></>
           )}/>
           <Column  title='是否显示屏幕' dataIndex= 'required' key='required'  fixed='left' render={(text, record, index)=>(
-            <> <Switch checkedChildren="是" unCheckedChildren="否" onChange={(checked,event)=>{this.switchChangeEvent(index,record,checked)}}/></>
+            <> <Switch defaultChecked={record.required} checkedChildren="是" unCheckedChildren="否" onChange={(checked,event)=>{this.initSwitchChangeEvent(index,record,checked)}}/></>
           )}/>
            <Column  dataIndex= 'action' key='action'  render={(text, record,index) => (
                   <>
-                <Button type="link" danger onClick={()=>this.delete(index)}>删除
+                <Button type="link" danger onClick={()=>this.initDelete(index)}>删除
                   </Button></>)}/>
         </Table>
 
         {/* 新增操作 */}
         <Table dataSource={(this.state.data)} pagination={false}  locale={{	emptyText: ' '}}>
           <Column   dataIndex= 'name' key='name'  fixed='left' render={(text, record, index)=>(
-            <><Input  onChange={e=>this.inputChangeEvent(index,record,"name",e)}/></>
+            <><Input  defaultValue={record.name} onChange={e=>this.inputChangeEvent(index,record,"name",e)}/></>
           )}/>
           <Column   dataIndex= 'displayName' key='displayName'  fixed='left' render={(text,record, index)=>(
-            <><Input onChange={e=>this.inputChangeEvent(index,record,"displayName",e)}/></>
+            <><Input defaultValue={record.displayName} onChange={e=>this.inputChangeEvent(index,record,"displayName",e)}/></>
           )}/>
           <Column   dataIndex= 'description' key='description'  fixed='left' render={(text, record, index)=>(
-            <><Input onChange={e=>this.inputChangeEvent(index,record,"description",e)}/></>
+            <><Input defaultValue={record.description} onChange={e=>this.inputChangeEvent(index,record,"description",e)}/></>
           )}/>
           <Column   dataIndex= 'required' key='required'  fixed='left' render={(text, record, index)=>(
-            <> <Switch checkedChildren="是" unCheckedChildren="否" onChange={(checked,event)=>{this.switchChangeEvent(index,record,checked)}}/></>
+            <> <Switch defaultChecked={record.required} checkedChildren="是" unCheckedChildren="否" onChange={(checked,event)=>{this.switchChangeEvent(index,record,checked)}}/></>
           )}/>
            <Column  dataIndex= 'action' key='action'  render={(text, record,index) => (
                   <>

@@ -80,6 +80,27 @@ export default class AddResource extends React.Component {
       apiSecretsData:data
     });
   }
+
+  //移除范围数据
+  removeScopeInit=(index)=>{
+    var data=  [...this.state.apiScopeData];
+    if(index>=0){
+      data.splice(index,1)
+      this.setState({
+        apiScopeData: data
+      }); 
+    }
+  }
+  //移除秘钥数据
+  removeSecretsInit=(index)=>{
+    var data=  [...this.state.apiSecretsData];
+    if(index>=0){
+      data.splice(index,1)
+      this.setState({
+        apiSecretsData: data
+      }); 
+    }
+  }
   //渲染页面
   render() {
     return (
@@ -151,7 +172,7 @@ export default class AddResource extends React.Component {
                  <Button type="dashed"  size="large" onClick={this.addUpdApiScopeEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ScopeChildDrawer GetData={this.getScopeDate} data={this.state.apiScopeData} closeEvent={this.ApiScopeClose}  childrenVisible={this.state.apiScopeVisible} title="Api范围" width={680} onChildrenDrawerClose={this.ApiScopeClose}/>
+              <ScopeChildDrawer GetData={this.getScopeDate} removeInit={this.removeScopeInit} data={this.state.apiScopeData} closeEvent={this.ApiScopeClose}  childrenVisible={this.state.apiScopeVisible} title="Api范围" width={680} onChildrenDrawerClose={this.ApiScopeClose}/>
                 </Form.Item>
               </Col>
             </Row>
@@ -163,7 +184,7 @@ export default class AddResource extends React.Component {
                  <Button type="dashed"  size="large" onClick={this.addUpdApiSecretsEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ScopeChildDrawer GetData={this.getSecretsDate} data={this.state.apiSecretsData} closeEvent={this.ApiSecretsClose}  childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={680} onChildrenDrawerClose={this.ApiSecretsClose}/>
+              <ScopeChildDrawer GetData={this.getSecretsDate} removeInit={this.removeSecretsInit} data={this.state.apiSecretsData} closeEvent={this.ApiSecretsClose}  childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={680} onChildrenDrawerClose={this.ApiSecretsClose}/>
                 </Form.Item>
               </Col>
             </Row>
