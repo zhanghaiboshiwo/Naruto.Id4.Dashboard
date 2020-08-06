@@ -1,4 +1,5 @@
-﻿using Naruto.Id4.Dashboard.Model;
+﻿using Naruto.Id4.Dashboard.Extensions;
+using Naruto.Id4.Dashboard.Model;
 using Naruto.Id4.Dashboard.Storage;
 using System;
 using System.Collections.Generic;
@@ -63,6 +64,43 @@ namespace Naruto.Id4.Dashboard.Services
             }
             //访问存储接口
             var res = await resourcesStorage.DeleteById(id);
+            if (res)
+            {
+                return new NarutoSuccessResult("操作成功");
+            }
+            return new NarutoFailResult("操作失败");
+        }
+
+        /// <summary>
+        /// 保存资源
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public async Task<NarutoResult> Save(ResourcesModel model)
+        {
+            #region 参数校检
+
+            if (model == null)
+            {
+                return new NarutoFailResult($"{nameof(model)}参数不能为空");
+            }
+            if (model.Name.IsNullOfEmpty())
+            {
+                return new NarutoFailResult($"{nameof(model.Name)}参数不能为空");
+            }
+            if (model.DisplayName.IsNullOfEmpty())
+            {
+                return new NarutoFailResult($"{nameof(model.DisplayName)}参数不能为空");
+            }
+            #endregion
+            //验证资源名称是否存在
+            //验证是否存在
+            if ((await resourcesStorage.ExistsResource(model.Id, model.Name)))
+            {
+                return new NarutoFailResult("当前资源名称已经存在!");
+            }
+            //调用数据访问
+            var res = await resourcesStorage.AddUpdResources(model);
             if (res)
             {
                 return new NarutoSuccessResult("操作成功");

@@ -5,6 +5,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import config from '../config';
 import  ScopeChildDrawer from './ScopeChildDrawer';
+import SecretsChildDrawer from './SecretsChildDrawer';
+
 const { Option } = Select;
 const {TextArea }=Input;
 //配置全局参数
@@ -18,6 +20,7 @@ export default class AddResource extends React.Component {
       name:"",//名称
       description:"",//描述
       displayName:"",//显示名
+      enabled:false,//是否启用
       visible: false,
       apiScopeVisible:false,
       apiSecretsVisible:false,
@@ -65,8 +68,28 @@ export default class AddResource extends React.Component {
     });
   }
 
-  saveEvent=(e)=>{
-    console.log(this.state);
+  saveEvent=async (ts)=>{
+    //调用接口保存客户端
+    var res= await axios.post("/naruto/resources",{
+      Id:this.props.id,
+      name:this.state.name,
+      enabled:this.state.enabled,
+      description:this.state.description,//描述
+      displayName:this.state.displayName,//显示名
+      apiScopes:this.state.apiScopeData,
+      apiSecrets:this.state.apiSecretsData
+     });
+     if(res.data!=null && res.data.status==0){
+        //关闭弹出层
+        ts.onClose();
+        //刷新父页面
+        this.props.onReloadEvent();
+        //重新加载表格
+        return (message.success('操作成功'));
+      }
+      else{
+        return (message.warning(res.data!=null?res.data.msg:"操作失败"));
+      }
   }
 //从子组件 获取 api范围保存的数据 存储到当前的state中
   getScopeDate=(data)=>{
@@ -172,7 +195,7 @@ export default class AddResource extends React.Component {
                  <Button type="dashed"  size="large" onClick={this.addUpdApiScopeEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ScopeChildDrawer GetData={this.getScopeDate} removeInit={this.removeScopeInit} data={this.state.apiScopeData} closeEvent={this.ApiScopeClose}  childrenVisible={this.state.apiScopeVisible} title="Api范围" width={680} onChildrenDrawerClose={this.ApiScopeClose}/>
+              <ScopeChildDrawer GetData={this.getScopeDate} removeInit={this.removeScopeInit} data={this.state.apiScopeData}   childrenVisible={this.state.apiScopeVisible} title="Api范围" width={680} onChildrenDrawerClose={this.ApiScopeClose}/>
                 </Form.Item>
               </Col>
             </Row>
@@ -184,7 +207,7 @@ export default class AddResource extends React.Component {
                  <Button type="dashed"  size="large" onClick={this.addUpdApiSecretsEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ScopeChildDrawer GetData={this.getSecretsDate} removeInit={this.removeSecretsInit} data={this.state.apiSecretsData} closeEvent={this.ApiSecretsClose}  childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={680} onChildrenDrawerClose={this.ApiSecretsClose}/>
+              <SecretsChildDrawer GetData={this.getSecretsDate} removeInit={this.removeSecretsInit} data={this.state.apiSecretsData}   childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={480} onChildrenDrawerClose={this.ApiSecretsClose}/>
                 </Form.Item>
               </Col>
             </Row>

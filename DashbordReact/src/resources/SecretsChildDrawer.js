@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Drawer, Button, Input,Table,Switch } from 'antd';
+import { Drawer, Button, Input,Table,DatePicker } from 'antd';
 const {Column} =Table;
 
 // 授权类型弹出层
@@ -18,10 +18,8 @@ export default class ChildDrawer extends React.Component {
       data.push(
         {
           key:Math.random(),
-          name:"",
-          displayName:"",
-          description:"",
-          required:false
+          value:"",
+          expiration:""
       })
       this.setState({
         data: data
@@ -53,13 +51,14 @@ export default class ChildDrawer extends React.Component {
             data[index]=record;
           }
         }
-        //切换框的事件
-        switchChangeEvent=(index,record,checked)=>{
+
+        dateChangeEvent=(index,record,key,nowValue)=>{
+          console.log(nowValue);
            //获取数组数据
            var data=  [...this.state.data];
            if(index>=0){
              //更新数据
-             record["required"]=checked;
+             record[key]=nowValue;
             //修改数组
              data[index]=record;
              //更新重新状态
@@ -67,18 +66,21 @@ export default class ChildDrawer extends React.Component {
                 data: data
               });
            }
-        }
-        //修改table的切换框的事件
-        initSwitchChangeEvent=(index,record,checked)=>{
-          //获取数组数据
-          var data=  [...this.props.data];
-          if(index>=0){
-            //更新数据
-            record["required"]=checked;
-           //修改数组
-            data[index]=record;
-          }
-       }
+           console.log(data);
+        };
+
+        initDateChangeEvent=(index,record,key,nowValue)=>{
+           //获取数组数据
+           var data=  [...this.props.data];
+           if(index>=0){
+             //更新数据
+             record[key]=nowValue;
+            //修改数组
+             data[index]=record;
+           }
+        };
+      
+      
         //保存数据
         okEvent=()=>{
           console.log(this.props.data);
@@ -139,17 +141,11 @@ export default class ChildDrawer extends React.Component {
 
         {/* 修改赋值操作 */}
         <Table dataSource={this.props.data} pagination={false} locale={{	emptyText: ' '}}>
-          <Column  title='名称' dataIndex= 'name' key='name'  fixed='left' render={(text, record, index)=>(
-            <><Input defaultValue={record.name}  onChange={e=>this.initInputChangeEvent(index,record,"name",e)}/></>
+          <Column  title='秘钥' dataIndex= 'value' key='value'  fixed='left' render={(text, record, index)=>(
+            <><Input defaultValue={record.value}  onChange={e=>this.initInputChangeEvent(index,record,"value",e)}/></>
           )}/>
-          <Column  title='显示名' dataIndex= 'displayName' key='displayName'  fixed='left' render={(text,record, index)=>(
-            <><Input defaultValue={record.displayName} onChange={e=>this.initInputChangeEvent(index,record,"displayName",e)}/></>
-          )}/>
-          <Column  title='描述' dataIndex= 'description' key='description'  fixed='left' render={(text, record, index)=>(
-            <><Input defaultValue={record.description} onChange={e=>this.initInputChangeEvent(index,record,"description",e)}/></>
-          )}/>
-          <Column  title='是否显示屏幕' dataIndex= 'required' key='required'  fixed='left' render={(text, record, index)=>(
-            <> <Switch defaultChecked={record.required} checkedChildren="是" unCheckedChildren="否" onChange={(checked,event)=>{this.initSwitchChangeEvent(index,record,checked)}}/></>
+          <Column  title='过期时间' dataIndex= 'expiration' key='expiration'  fixed='left' render={(text,record, index)=>(
+            <><DatePicker defaultValue={record.expiration} onChange={(moment,value)=>this.initDateChangeEvent(index,record,"expiration",value)}/></>
           )}/>
            <Column  dataIndex= 'action' key='action'  render={(text, record,index) => (
                   <>
@@ -159,17 +155,11 @@ export default class ChildDrawer extends React.Component {
 
         {/* 新增操作 */}
         <Table dataSource={(this.state.data)} pagination={false}  locale={{	emptyText: ' '}}>
-          <Column   dataIndex= 'name' key='name'  fixed='left' render={(text, record, index)=>(
-            <><Input  defaultValue={record.name} onChange={e=>this.inputChangeEvent(index,record,"name",e)}/></>
+          <Column   dataIndex= 'value' key='value'  fixed='left' render={(text, record, index)=>(
+            <><Input  defaultValue={record.value} onChange={e=>this.inputChangeEvent(index,record,"value",e)}/></>
           )}/>
-          <Column   dataIndex= 'displayName' key='displayName'  fixed='left' render={(text,record, index)=>(
-            <><Input defaultValue={record.displayName} onChange={e=>this.inputChangeEvent(index,record,"displayName",e)}/></>
-          )}/>
-          <Column   dataIndex= 'description' key='description'  fixed='left' render={(text, record, index)=>(
-            <><Input defaultValue={record.description} onChange={e=>this.inputChangeEvent(index,record,"description",e)}/></>
-          )}/>
-          <Column   dataIndex= 'required' key='required'  fixed='left' render={(text, record, index)=>(
-            <> <Switch defaultChecked={record.required} checkedChildren="是" unCheckedChildren="否" onChange={(checked,event)=>{this.switchChangeEvent(index,record,checked)}}/></>
+          <Column   dataIndex= 'expiration' key='expiration'  fixed='left' render={(text,record, index)=>(
+            <><DatePicker showTime defaultValue={record.expiration} onChange={(moment,value)=>this.dateChangeEvent(index,record,"expiration",value)}/></>
           )}/>
            <Column  dataIndex= 'action' key='action'  render={(text, record,index) => (
                   <>

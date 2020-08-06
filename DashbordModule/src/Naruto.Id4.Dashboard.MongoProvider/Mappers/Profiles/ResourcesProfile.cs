@@ -17,10 +17,12 @@ namespace Naruto.Id4.Dashboard.MongoProvider.Mappers.Profiles
             CreateMap<Entities.ApiResourceProperty, KeyValuePair<string, string>>()
               .ReverseMap();
 
-            //CreateMap<Entities.ApiResource, ResourcesModel>(MemberList.Destination)
-            //    .ConstructUsing(src => new IdentityServer4.Models.ApiResource())
-            //    .ForMember(x => x.ApiSecrets, opts => opts.MapFrom(x => x.Secrets))
-            //    .ReverseMap();
+            CreateMap<ResourcesModel, Entities.ApiResource>()
+                .ForMember(a => a.Scopes, b => b.MapFrom(c => c.ApiScopes))
+                 .ForMember(a => a.Secrets, b => b.MapFrom(c => c.ApiSecrets))
+                 .ReverseMap();
+            CreateMap<ApiScopeDTO, Entities.ApiScope>().ReverseMap();
+            CreateMap<ApiSecretDTO, Entities.ApiSecret>().ReverseMap();
 
             //CreateMap<Entities.ApiResourceClaim, string>()
             //    .ConstructUsing(x => x.Type)

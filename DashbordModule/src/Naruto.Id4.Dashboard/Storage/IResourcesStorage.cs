@@ -31,6 +31,13 @@ namespace Naruto.Id4.Dashboard.Storage
         Task<Tuple<List<ResourcesViewModel>, int>> GetResourcess(SearchResourcessModel search);
 
         /// <summary>
+        /// 验证资源名称是否存在
+        /// </summary>
+        /// <param name="id">主键id</param>
+        /// <param name="name">名称</param>
+        /// <returns></returns>
+         Task<bool> ExistsResource(string id, string name);
+        /// <summary>
         /// 更改资源的状态
         /// </summary>
         /// <param name="id"></param>

@@ -47,5 +47,11 @@ namespace Naruto.Id4.Dashboard.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<NarutoResult> DeleteById(string id) => await resourceService.DeleteById(id);
+        /// <summary>
+        /// 保存资源信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<NarutoResult> Save(ResourcesModel info) => await resourceService.Save(info);
     }
 }
