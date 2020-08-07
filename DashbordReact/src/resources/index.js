@@ -173,10 +173,10 @@ export default class Resources  extends React.Component {
                   <Column   dataIndex= 'action' key='action' fixed='left'  render={(text, record) => (
                   <Space>
                   {/* 编辑按钮 */}
-                    {/* <AddUpdResources onReloadEvent={async()=>{
-                      await this.getDataAsync(this.state.keyword,1,this.state.pageSize);
-                      this.setState({current:1});
-                    }} id={record.id}/> */}
+                  <AddResource onReloadEvent={async()=>{
+                        await this.getDataAsync(this.state.keyword,1,this.state.pageSize);
+                        this.setState({current:1});
+                      }} id={record.id}/>
                 <Button type="link" danger onClick={()=>this.deleteClientEvent(text, record,this)}>删除
                   </Button></Space>)}/>
                   </Table>

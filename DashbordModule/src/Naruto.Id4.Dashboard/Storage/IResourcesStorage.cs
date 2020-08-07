@@ -23,7 +23,7 @@ namespace Naruto.Id4.Dashboard.Storage
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<ResourcesModel> GetResources(long id);
+        Task<EditResourcesViewModel> GetResources(string id);
         /// <summary>
         /// 展示资源集合
         /// </summary>

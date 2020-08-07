@@ -30,6 +30,14 @@ namespace Naruto.Id4.Dashboard.Controllers
         /// <returns></returns>
         public async Task<NarutoResult> GetResourcess([FromQuery] SearchResourcessModel search) => await resourceService.GetResourcess(search);
 
+        [HttpGet("{id}")]
+        /// <summary>
+        /// 根据id查询资源
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        public async Task<NarutoResult> GetResources(string id) => await resourceService.GetResources(id);
+
 
         [HttpPost("enabled/{id}")]
         /// <summary>

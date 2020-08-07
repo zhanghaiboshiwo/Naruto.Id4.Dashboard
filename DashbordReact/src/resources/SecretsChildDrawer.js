@@ -1,6 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Drawer, Button, Input,Table,DatePicker } from 'antd';
+import moment from 'moment';
 const {Column} =Table;
 
 // 授权类型弹出层
@@ -19,7 +20,7 @@ export default class ChildDrawer extends React.Component {
         {
           key:Math.random(),
           value:"",
-          expiration:""
+          expiration:new Date()
       })
       this.setState({
         data: data
@@ -145,7 +146,7 @@ export default class ChildDrawer extends React.Component {
             <><Input defaultValue={record.value}  onChange={e=>this.initInputChangeEvent(index,record,"value",e)}/></>
           )}/>
           <Column  title='过期时间' dataIndex= 'expiration' key='expiration'  fixed='left' render={(text,record, index)=>(
-            <><DatePicker defaultValue={record.expiration} onChange={(moment,value)=>this.initDateChangeEvent(index,record,"expiration",value)}/></>
+            <><DatePicker showTime defaultValue={moment(record.expiration)} onChange={(moment,value)=>this.initDateChangeEvent(index,record,"expiration",value)}/></>
           )}/>
            <Column  dataIndex= 'action' key='action'  render={(text, record,index) => (
                   <>
@@ -159,7 +160,7 @@ export default class ChildDrawer extends React.Component {
             <><Input  defaultValue={record.value} onChange={e=>this.inputChangeEvent(index,record,"value",e)}/></>
           )}/>
           <Column   dataIndex= 'expiration' key='expiration'  fixed='left' render={(text,record, index)=>(
-            <><DatePicker showTime defaultValue={record.expiration} onChange={(moment,value)=>this.dateChangeEvent(index,record,"expiration",value)}/></>
+            <><DatePicker showTime defaultValue={moment(record.expiration)}  onChange={(moment,value)=>this.dateChangeEvent(index,record,"expiration",value)}/></>
           )}/>
            <Column  dataIndex= 'action' key='action'  render={(text, record,index) => (
                   <>

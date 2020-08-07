@@ -66,9 +66,21 @@ namespace Naruto.Id4.Dashboard.MongoProvider
             return returnValue;
         }
 
-        public Task<ResourcesModel> GetResources(long id)
+        /// <summary>
+        /// 获取资源信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<EditResourcesViewModel> GetResources(string id)
         {
-            throw new NotImplementedException();
+            id.IsNotNull();
+            //获取客户端
+            var apiResource = await mongoRepository.Query<ApiResource>().FirstOrDefaultAsync(a => a.Id == id);
+            if (apiResource == null)
+            {
+                return default;
+            }
+            return apiResource.ToModel();
         }
         /// <summary>
         /// 分页查询资源信息

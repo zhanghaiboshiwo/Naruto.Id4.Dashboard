@@ -31,6 +31,23 @@ namespace Naruto.Id4.Dashboard.Services
         }
 
         /// <summary>
+        /// 根据id查询资源信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<NarutoResult> GetResources(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return new NarutoFailResult($"{nameof(id)}值不能为空");
+            }
+
+            var res = await resourcesStorage.GetResources(id);
+
+            return new NarutoSuccessResult("操作成功", res);
+        }
+
+        /// <summary>
         /// 更改客户端的启用状态
         /// </summary>
         /// <param name="id"></param>

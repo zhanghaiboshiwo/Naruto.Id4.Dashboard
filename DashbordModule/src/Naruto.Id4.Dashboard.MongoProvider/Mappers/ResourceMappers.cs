@@ -20,9 +20,9 @@ namespace Naruto.Id4.Dashboard.MongoProvider.Mappers
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static ResourcesModel ToModel(this Entities.ApiResource entity)
+        public static EditResourcesViewModel ToModel(this Entities.ApiResource entity)
         {
-            return Mapper.Map<ResourcesModel>(entity);
+            return Mapper.Map<EditResourcesViewModel>(entity);
         }
         /// <summary>
         /// 转换成实体
@@ -33,5 +33,7 @@ namespace Naruto.Id4.Dashboard.MongoProvider.Mappers
         {
             return Mapper.Map<Entities.ApiResource>(model);
         }
+
+
     }
 }

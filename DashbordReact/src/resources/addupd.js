@@ -42,6 +42,28 @@ export default class AddResource extends React.Component {
     });
     //验证是否是编辑页面，是的话从接口获取数据 填充
     if(this.props.id!=null){
+      var res=await axios.get(`/naruto/resources/${this.props.id}`)
+      //验证接口返回参
+      if(res.data==null || res.data.status!=0){
+        return (message.warning(res.data!=null?res.data.msg:"操作失败"));
+      }
+      else{
+        //获取数据
+        var resourcesData=res.data.data;
+
+        var apiScopeData=[];
+        var apiSecretsData=[];
+        resourcesData.apiScopes.map((item,i)=>apiScopeData.push({key:Math.random(),value:item}));
+        resourcesData.apiSecrets.map((item,i)=>apiSecretsData.push({key:Math.random(),value:item}));
+        this.setState({
+          name:resourcesData.name,//名称
+          description:resourcesData.description,//描述
+          displayName:resourcesData.displayName,//显示名
+          enabled:resourcesData.enabled,//是否启用
+          apiScopeData:apiScopeData//api范围 数据
+          ,apiSecretsData:apiSecretsData//api秘钥数据
+        });
+      }
      }
   };
   //显示api范围弹出层
@@ -207,7 +229,7 @@ export default class AddResource extends React.Component {
                  <Button type="dashed"  size="large" onClick={this.addUpdApiSecretsEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <SecretsChildDrawer GetData={this.getSecretsDate} removeInit={this.removeSecretsInit} data={this.state.apiSecretsData}   childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={480} onChildrenDrawerClose={this.ApiSecretsClose}/>
+              <SecretsChildDrawer GetData={this.getSecretsDate} removeInit={this.removeSecretsInit} data={this.state.apiSecretsData}   childrenVisible={this.state.apiSecretsVisible} title="Api秘钥" width={580} onChildrenDrawerClose={this.ApiSecretsClose}/>
                 </Form.Item>
               </Col>
             </Row>
