@@ -55,7 +55,6 @@ namespace Naruto.Id4.Dashboard.MongoProvider
                      { "Updated",DateTime.UtcNow},
                     { "Name",entity.Name},
                     { "Description",entity.Description},
-                    { "Description",entity.Description},
                     { "DisplayName",entity.DisplayName},
                     { "Enabled",entity.Enabled},
                     { "Secrets",entity.Secrets},

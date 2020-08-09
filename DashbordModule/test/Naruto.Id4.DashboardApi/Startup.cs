@@ -36,8 +36,8 @@ namespace Naruto.Id4.DashboardApi
             });
             services.AddControllers().AddNarutoId4DashbordApiMongoProvider(a =>
             {
-                //a.ConnectionString = "mongodb://192.168.0.106:27017"; a.DataBase = "identityserver";
-                a.ConnectionString = "mongodb://192.168.31.168:27021"; a.DataBase = "identityserver";
+                a.ConnectionString = "mongodb://192.168.0.110:27017"; a.DataBase = "identityserver";
+               // a.ConnectionString = "mongodb://192.168.31.168:27021"; a.DataBase = "identityserver";
             });
         }
 

@@ -53,8 +53,8 @@ export default class AddResource extends React.Component {
 
         var apiScopeData=[];
         var apiSecretsData=[];
-        resourcesData.apiScopes.map((item,i)=>apiScopeData.push({key:Math.random(),value:item}));
-        resourcesData.apiSecrets.map((item,i)=>apiSecretsData.push({key:Math.random(),value:item}));
+        resourcesData.apiScopes.map((item,i)=>apiScopeData.push({key:Math.random(),name:item.name,description:item.description,displayName:item.displayName,required:item.required}));
+        resourcesData.apiSecrets.map((item,i)=>apiSecretsData.push({key:Math.random(),value:item.value,expiration:item.expiration}));
         this.setState({
           name:resourcesData.name,//名称
           description:resourcesData.description,//描述
@@ -63,6 +63,9 @@ export default class AddResource extends React.Component {
           apiScopeData:apiScopeData//api范围 数据
           ,apiSecretsData:apiSecretsData//api秘钥数据
         });
+        console.log(this.apiScopeData);
+        console.log(this.apiSecretsData);
+        console.log(this.state);
       }
      }
   };
