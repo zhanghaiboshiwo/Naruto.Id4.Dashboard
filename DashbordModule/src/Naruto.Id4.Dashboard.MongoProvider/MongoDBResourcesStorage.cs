@@ -46,6 +46,8 @@ namespace Naruto.Id4.Dashboard.MongoProvider
             //验证新增修改
             if (model.Id.IsNullOrEmpty())
             {
+                //默认启用
+                entity.Enabled = true;
                 await mongoRepository.Command<ApiResource>().AddAsync(entity);
             }
             else
