@@ -26,18 +26,19 @@ namespace Naruto.Id4.DashboardApi
         {
             services.AddCors(a =>
             {
-                a.AddPolicy("any",b=> {
+                a.AddPolicy("any", b =>
+                {
 
                     b.AllowCredentials();
                     b.AllowAnyHeader();
                     b.AllowAnyMethod();
-                    b.WithOrigins("http://localhost:3000");
+                    b.WithOrigins(Configuration.GetSection("Origins").Get<string[]>());
                 });
             });
             services.AddControllers().AddNarutoId4DashbordApiMongoProvider(a =>
             {
-                a.ConnectionString = "mongodb://192.168.0.110:27017"; a.DataBase = "identityserver";
-               // a.ConnectionString = "mongodb://192.168.31.168:27021"; a.DataBase = "identityserver";
+                a.ConnectionString = $"mongodb://{Configuration.GetValue<string>("MongoDB")}";
+                a.DataBase = "identityserver";
             });
         }
 
@@ -50,7 +51,7 @@ namespace Naruto.Id4.DashboardApi
             }
             app.UseCors("any");
             app.UseRouting();
-           
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
