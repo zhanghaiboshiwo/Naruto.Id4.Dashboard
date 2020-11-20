@@ -334,7 +334,7 @@ export default class AddClient extends React.Component {
                 <Tag color="blue">authorization_code 授权码模式</Tag>
                 <Tag color="blue">client_credentials 客户端授权模式</Tag>
                 <Tag color="blue">password 密码模式</Tag>
-                <Tag color="blue">urn:ietf:params:oauth:grant-type:device_code 使用js客户端</Tag>
+                <Tag color="blue">urn:ietf:params:oauth:grant-type:device_code 设备码</Tag>
                 </div>)
             } GetData={this.getGrantTypeDate} data={this.state.grantTypeData} removeInit={this.removeGrantTypeInit}  childrenVisible={this.state.childrenGrantTypeDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
               </Form.Item>
