@@ -60,5 +60,10 @@ namespace Naruto.Id4.Dashboard.Model
         /// 密钥
         /// </summary>
         public List<string> clientSecrets { get; set; }
+
+        /// <summary>
+        /// 允许通过浏览器访问令牌
+        /// </summary>
+        public bool allowAccessTokensViaBrowser { get; set; }
     }
 }

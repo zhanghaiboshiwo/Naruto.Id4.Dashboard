@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Drawer, Form, Button, Col, Row, Input, Select ,InputNumber ,message} from 'antd';
+import { Drawer, Form, Button, Col, Row, Input, Select ,InputNumber ,message,Tag,Switch} from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import  ChildDrawer from './ChildDrawer';
 import axios from 'axios';
@@ -23,6 +23,7 @@ export default class AddClient extends React.Component {
       childrenOriginDrawer:false,
       childrenRedirectUriDrawer:false,
       childrenPostOutRedirectUriDrawer:false,
+      allowAccessTokensViaBrowser:false,//允许通过浏览器访问令牌
       //存储数据字段
       grantTypeData:[],
       grantScopeData:[],
@@ -79,6 +80,7 @@ export default class AddClient extends React.Component {
           clientSecrets:clientData.clientSecrets,
           accessTokenLifetime:clientData.accessTokenLifetime,
           identityTokenLifetime:clientData.identityTokenLifetime,
+          allowAccessTokensViaBrowser:clientData.allowAccessTokensViaBrowser
         });
       }
      }
@@ -122,7 +124,8 @@ export default class AddClient extends React.Component {
     Description:this.state.description,
     ClientSecrets:this.state.clientSecrets,
     AccessTokenLifetime:this.state.accessTokenLifetime,
-    IdentityTokenLifetime:this.state.identityTokenLifetime
+    IdentityTokenLifetime:this.state.identityTokenLifetime,
+    AllowAccessTokensViaBrowser:this.state.allowAccessTokensViaBrowser
    });
    if(res.data!=null && res.data.status==0){
       //关闭弹出层
@@ -324,7 +327,16 @@ export default class AddClient extends React.Component {
               <Button type="dashed"  size="large" onClick={this.addGrantTypeEvent}>
         <PlusOutlined />{this.props.id==null?"新增":"编辑"} 
               </Button>
-              <ChildDrawer GetData={this.getGrantTypeDate} data={this.state.grantTypeData} removeInit={this.removeGrantTypeInit}  childrenVisible={this.state.childrenGrantTypeDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
+              <ChildDrawer msgNotice={
+                (<div>
+                  <Tag color="blue">implicit（简单模式）oidc  使用js客户端 </Tag>
+                <Tag color="blue">hybrid 混合模式（oidc+oauth）</Tag>
+                <Tag color="blue">authorization_code 授权码模式</Tag>
+                <Tag color="blue">client_credentials 客户端授权模式</Tag>
+                <Tag color="blue">password 密码模式</Tag>
+                <Tag color="blue">urn:ietf:params:oauth:grant-type:device_code 使用js客户端</Tag>
+                </div>)
+            } GetData={this.getGrantTypeDate} data={this.state.grantTypeData} removeInit={this.removeGrantTypeInit}  childrenVisible={this.state.childrenGrantTypeDrawer} title="授权类型" width={500} onChildrenDrawerClose={this.onGrantTypeDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
@@ -342,7 +354,7 @@ export default class AddClient extends React.Component {
               <Button type="dashed"  size="large" onClick={this.addGrantScopeEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ChildDrawer GetData={this.getGrantScopeDate} data={this.state.grantScopeData} removeInit={this.removeGrantScopeInit} childrenVisible={this.state.childrenGrantScopeDrawer} title="授权范围" width={500} onChildrenDrawerClose={this.onGrantScopeDrawerClose}/>
+              <ChildDrawer msgNotice={<Tag color="blue">当使用oidc的时候需要添加openid,profile两个范围</Tag>} GetData={this.getGrantScopeDate} data={this.state.grantScopeData} removeInit={this.removeGrantScopeInit} childrenVisible={this.state.childrenGrantScopeDrawer} title="授权范围" width={500} onChildrenDrawerClose={this.onGrantScopeDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
@@ -380,7 +392,7 @@ export default class AddClient extends React.Component {
               <Button type="dashed"  size="large" onClick={this.addRedirectUriEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ChildDrawer GetData={this.getRedirectUriDate} data={this.state.redirectUriData} removeInit={this.removeRedirectUriInit}  childrenVisible={this.state.childrenRedirectUriDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onRedirectUriDrawerClose}/>
+              <ChildDrawer msgNotice={<Tag color="blue">hybrid模式中，需要添加 signin-oidc 地址</Tag>} GetData={this.getRedirectUriDate} data={this.state.redirectUriData} removeInit={this.removeRedirectUriInit}  childrenVisible={this.state.childrenRedirectUriDrawer} title="跨域来源" width={500} onChildrenDrawerClose={this.onRedirectUriDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
@@ -398,7 +410,7 @@ export default class AddClient extends React.Component {
               <Button type="dashed"  size="large" onClick={this.addPostOutRedirectUriEvent}>
               <PlusOutlined />{this.props.id==null?"新增":"编辑"}  
               </Button>
-              <ChildDrawer GetData={this.getPostOutRedirectUriDate} data={this.state.postOutRedirectUriData} removeInit={this.removePostOutRedirectUriInit}  childrenVisible={this.state.childrenPostOutRedirectUriDrawer} title="注销后重定向Uri" width={500} onChildrenDrawerClose={this.onPostOutRedirectUriDrawerClose}/>
+              <ChildDrawer msgNotice={<Tag color="blue">hybrid模式中，需要添加 signout-callback-oidc  地址</Tag>} GetData={this.getPostOutRedirectUriDate} data={this.state.postOutRedirectUriData} removeInit={this.removePostOutRedirectUriInit}  childrenVisible={this.state.childrenPostOutRedirectUriDrawer} title="注销后重定向Uri" width={500} onChildrenDrawerClose={this.onPostOutRedirectUriDrawerClose}/>
               </Form.Item>
               </Col>
             </Row>
@@ -408,6 +420,17 @@ export default class AddClient extends React.Component {
                   label="访问周期(s)"
                   rules={[{ required: true, message: 'Please choose the dateTime' }]}>
                  <InputNumber min={1} defaultValue={this.state.accessTokenLifetime} value={this.state.accessTokenLifetime} placeholder="单位秒" onChange={(value)=>this.setState({accessTokenLifetime:value})}/>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col span={8}>
+                <Form.Item label="允许通过浏览器访问令牌">
+                <Switch checkedChildren="开启" unCheckedChildren="关闭" checked={this.state.allowAccessTokensViaBrowser}  onChange={async (checked,event)=>{
+                  this.setState({
+                    allowAccessTokensViaBrowser:checked
+                  });
+                }}/>
                 </Form.Item>
               </Col>
             </Row>

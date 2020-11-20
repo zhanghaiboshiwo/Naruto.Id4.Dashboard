@@ -65,6 +65,7 @@ namespace Naruto.Id4.Dashboard.MongoProvider
                     { "RedirectUris",entity.RedirectUris},
                     { "PostLogoutRedirectUris",entity.PostLogoutRedirectUris},
                     { "AllowedCorsOrigins",entity.AllowedCorsOrigins},
+                    { "AllowAccessTokensViaBrowser",entity.AllowAccessTokensViaBrowser}
                 });
             }
             return returnValue;

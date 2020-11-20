@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Drawer, Button, Input,List } from 'antd';
+import { Drawer, Button, Input,List,Tag } from 'antd';
 
 // 授权类型弹出层
 export default class ChildDrawer extends React.Component {
@@ -27,6 +27,7 @@ export default class ChildDrawer extends React.Component {
       if(index>=0){
         //更新数据
        item.value=e.target.value;
+       console.log(item);
        //修改数组
         data.splice(index,1,item);
         //更新重新状态
@@ -95,7 +96,8 @@ export default class ChildDrawer extends React.Component {
           </div>
         }
       visible={this.props.childrenVisible}> {/* 显示隐藏*/}
-
+      {/* 提示信息 */}
+        {this.props.msgNotice}
        <List
        locale={{	emptyText: ' '}} //设置数据为空的时候默认展示的内容
       itemLayout="horizontal"
@@ -103,7 +105,7 @@ export default class ChildDrawer extends React.Component {
       renderItem={item => (
         <List.Item actions={[<a key={item.Id} onClick={e=>this.removeInitOnClick(item)}>删除</a>]}> 
           <List.Item.Meta
-            description={<Input  defaultValue={item.value}  />}
+            description={<Input  defaultValue={item.value} />}
           />
         </List.Item>
       )}/>

@@ -60,6 +60,7 @@ namespace Naruto.Id4.Dashboard.MongoProvider.Mappers.Profiles
                 .ForMember(dest => dest.postLogoutRedirectUris, opt => opt.MapFrom(src => src.PostLogoutRedirectUris))
                 .ForMember(dest => dest.redirectUris, opt => opt.MapFrom(src => src.RedirectUris))
                 .ForMember(dest => dest.clientSecrets, opt => opt.MapFrom(src => src.ClientSecrets))
+                 .ForMember(dest => dest.allowAccessTokensViaBrowser, opt => opt.MapFrom(src => src.AllowAccessTokensViaBrowser))
                 ;
         }
     }
